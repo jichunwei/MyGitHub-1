@@ -19,3 +19,8 @@ git log --graph
 git diff
 2. 查看工作树和最新提交的差别
 git diff HEAD
+
+
+创建分支：
+1. git checkout -b fix-B
+2. git push --set-upstream origin fix-B
