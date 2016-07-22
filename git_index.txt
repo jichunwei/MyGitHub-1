@@ -11,8 +11,16 @@ git log README.md
 4  显示文件的改动
 git log -p
 
+5 以图表形式显示
+git log --graph
+
 ========================查看更改前后的差别=====================
 1.查看工作树和暂存区的差别
 git diff
 2. 查看工作树和最新提交的差别
 git diff HEAD
+
+
+创建分支：
+1. git checkout -b fix-B
+2. git push --set-upstream origin fix-B
