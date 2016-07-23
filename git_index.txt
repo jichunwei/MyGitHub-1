@@ -25,4 +25,5 @@ git diff HEAD
 
 创建分支：
 1. git checkout -b fix-B
+2. git merge --no-ff fix-B
 2. git push --set-upstream origin fix-B
