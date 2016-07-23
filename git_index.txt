@@ -25,5 +25,36 @@ git diff HEAD
 
 创建分支：
 1. git checkout -b fix-B
-2. git merge --no-ff fix-B
-2. git push --set-upstream origin fix-B
+合并至master分支
+2. git merge --no-ff master
+
+3. git push --set-upstream origin fix-B
+
+4. 当前分支推送到远程master
+ git push -u origin master 
+ 
+5. 推送至master以外的分支
+git push -u origin feature-B
+ 
+========================从远程仓库获取==========================
+1. 获取远程仓库
+ git clone git@github.com:Tanshixiong/MyGitHub.git
+ 
+2. 获取远程的feature-D 分支
+git checkout -b feature-D origin/feature-D 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
