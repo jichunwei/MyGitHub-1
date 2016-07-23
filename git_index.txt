@@ -14,6 +14,8 @@ git log -p
 5 以图表形式显示
 git log --graph
 
+6. git reflog 查看当前仓库执行过的操作的日志
+
 ========================查看更改前后的差别=====================
 1.查看工作树和暂存区的差别
 git diff
@@ -23,4 +25,5 @@ git diff HEAD
 
 创建分支：
 1. git checkout -b fix-B
+2. git merge --no-ff fix-B
 2. git push --set-upstream origin fix-B
