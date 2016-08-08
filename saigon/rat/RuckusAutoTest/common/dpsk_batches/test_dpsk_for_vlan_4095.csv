@@ -1,0 +1,4 @@
+#User Name ,Mac Address,Vlan ID
+DPSK-User-1,,4095
+DPSK-User-2,00:11:22:33:44:55,1
+DPSK-User-3,11:22:33:44:55:66,0

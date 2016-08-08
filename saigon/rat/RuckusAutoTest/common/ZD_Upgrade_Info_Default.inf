@@ -1,0 +1,14 @@
+[TESTBED_INFO]
+# information use for creating new testbed in  RAT framework
+name        = CPE
+location    = SDC
+owner       = support@ruckuswireless.com
+
+[COMMON]
+#Common information of AP, Remote Stations
+target_ip_list = ['192.168.0.2', '192.168.0.10', '192.168.0.253', '192.168.0.252']
+
+[FW_UPGRADE_CONFIG]
+build_server = 'k2.video54.local'
+up_cfg_common = {'server_root_path':'C:/rwqaauto/firmware','server_ip':'192.168.0.10','ftp_user_name':'cherry','ftp_password':'123456'}
+up_cfg_zd = {'target_build_stream': 'ZD3000_mainline','target_bno': '68','baseline_build_stream': 'ZD3000_mainline','baseline_bno':'60'}

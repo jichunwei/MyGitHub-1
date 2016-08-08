@@ -1,0 +1,5 @@
+OnInit
+Frame __init__
+A pretend error message
+before MainLoop
+OnExit

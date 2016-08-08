@@ -1,0 +1,187 @@
+'''
+create @2011/12/19, by west.li@ruckuswireless.com
+1.    add one management acl (Test Engine IP is allowed by the acl)(3.2.9)
+2.    enable management interface(3.2.11)
+3.    Set session timeout from web UI(1mins)
+4.    Verify zd can be accessed by web directly 30 seconds before timeout(3.2.2)
+5.    verify 30 seconds after session timeout, ZD web UI need log in again(3.2.2)
+6.    Verify zd can be accessed by telnet directly 30 seconds before timeout(3.2.4)
+7.    verify 30 seconds after session timeout, ZD telnet need log in again(3.2.4)
+8.    Verify zd can be accessed by SSH directly 30 seconds before timeout(3.2.5)
+9.    verify 30 seconds after session timeout, ZD SSH need log in again(3.2.5)
+10.    configure ZD to authenticate admin by an Radius server, session timeout 3 mins(3.2.12)
+11.    repeat step 4~9(3.2.12)
+
+'''
+
+
+import sys
+import libZD_TestSuite as testsuite
+from RuckusAutoTest.common import lib_KwList as kwlist
+from RuckusAutoTest.common import Ratutils as utils
+from RuckusAutoTest.common import lib_Constant as const
+
+def defineTestConfiguration():
+    test_cfgs = [] 
+    test_case_name='random session timeout value sync from web to CLI'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout from web UI' % test_case_name
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZDCLI_Verify_Session_Timeout'
+    common_name = '[%s]verify the value is sync from Web to ZDCLI' % test_case_name
+    test_cfgs.append(({},test_name, common_name, 1, False))    
+    
+    test_case_name='random session timeout value sync from ZDCLI to Web'
+    test_name = 'CB_ZDCLI_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout from ZDCLI' % test_case_name
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Verify_Session_Timeout'
+    common_name = '[%s]verify the value is sync from ZDCLI to Web' % test_case_name
+    test_cfgs.append(({},test_name, common_name, 1, False))    
+    
+    test_case_name='verify 1 and 1440 can be set via web UI'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1 via web UI' % test_case_name
+    test_cfgs.append(({'session_timeout':1}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1440 via web UI' % test_case_name
+    test_cfgs.append(({'session_timeout':1440}, test_name, common_name, 1, False))
+    
+    test_case_name='verify 1 and 1440 can be set via zdcli'
+    test_name = 'CB_ZDCLI_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1 via ZDCLI' % test_case_name
+    test_cfgs.append(({'session_timeout':1}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1440 via ZDCLI' % test_case_name
+    test_cfgs.append(({'session_timeout':1440}, test_name, common_name, 1, False))
+    
+    test_case_name='verify 0 and 1441 can not be set via web UI'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 0 via web UI should fail' % test_case_name
+    test_cfgs.append(({'session_timeout':0}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1441 via web UI should fail' % test_case_name
+    test_cfgs.append(({'session_timeout':1441}, test_name, common_name, 1, False))
+    
+    test_case_name='verify 0 and 1441 can not be set via ZDCLI'
+    test_name = 'CB_ZDCLI_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 0 via web UI should fail' % test_case_name
+    test_cfgs.append(({'session_timeout':0}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZDCLI_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1441 via web UI should fail' % test_case_name
+    test_cfgs.append(({'session_timeout':1441}, test_name, common_name, 1, False))
+    
+    test_case_name='reboot ZD and check the session timeout value'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout,ready to do reboot and verify'% test_case_name
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Reboot' 
+    common_name = '[%s]reboot zd' % test_case_name
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Verify_Session_Timeout'
+    common_name = '[%s]verify the session timeout value not changed after reboot' % test_case_name
+    test_cfgs.append(({},test_name, common_name, 1, False)) 
+        
+    test_case_name='check the session timeout value is 30 after zd set factory'
+    test_name = 'CB_ZD_Set_Factory_Default'
+    common_name = '[%s]ZD set Factory' % test_case_name
+    test_cfgs.append(({'relogin_zdcli':False},test_name, common_name, 1, False))  
+    
+    test_name = 'CB_ZD_Verify_Session_Timeout'
+    common_name = '[%s]verify the session timeout value is 30' % test_case_name
+    test_cfgs.append(({'session_timeout':30},test_name, common_name, 1, False)) 
+    
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = 'set session timeout,ready to do backup-restore cases'
+    test_cfgs.append(({}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Backup' 
+    common_name = 'backup configure file' 
+    test_cfgs.append(({}, test_name, common_name, 1, False))
+    
+    test_case_name='session timeout value will be restored by full mode'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1440 via web UI' % test_case_name
+    test_cfgs.append(({'session_timeout':1440,'update_carribag':False}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Restore' 
+    common_name = '[%s]restore configure file by full mode' % test_case_name
+    test_cfgs.append(({'relogin_cli':False}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Verify_Session_Timeout'
+    common_name = '[%s]verify the session timeout value is restored' % test_case_name
+    test_cfgs.append(({},test_name, common_name, 1, False)) 
+    
+    test_case_name='session timeout value will be restored by failover mode'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1440 via web UI' % test_case_name
+    #@author: Jane.Guo @since: 2013-09 adapt to bug zf-4011
+    test_cfgs.append(({'session_timeout':1440}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Restore' 
+    common_name = '[%s]restore configure file by failover mode' % test_case_name
+    test_cfgs.append(({'relogin_cli':False,'restore_type':'restore_everything_except_ip'}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Verify_Session_Timeout'
+    common_name = '[%s]verify the session timeout value is restored' % test_case_name
+    test_cfgs.append(({},test_name, common_name, 1, False)) 
+    
+    test_case_name='session timeout value will not be restored by policy mode'
+    test_name = 'CB_ZD_Set_Session_Timeout' 
+    common_name = '[%s]set session timeout to 1440 via web UI' % test_case_name
+    test_cfgs.append(({'session_timeout':1440}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Restore' 
+    common_name = '[%s]restore configure file by policy mode' % test_case_name
+    test_cfgs.append(({'relogin_cli':False,'restore_type':'restore_basic_config'}, test_name, common_name, 1, False))
+    
+    test_name = 'CB_ZD_Verify_Session_Timeout'
+    common_name = '[%s]verify the session timeout value is not restored' % test_case_name
+    test_cfgs.append(({},test_name, common_name, 1, False)) 
+    
+    return test_cfgs
+    
+def make_test_suite(**kwargs):
+    attrs = dict (
+        interactive_mode = True,
+        sta_id = 0,
+        targetap = False,
+        testsuite_name="admin auto logout basic and backup restore"
+    )
+    attrs.update(kwargs)
+    
+    if attrs["testsuite_name"]: ts_name = attrs["testsuite_name"]
+    else: ts_name ="admin auto logout basic and backup restore"
+    test_cfgs = defineTestConfiguration()
+    ts = testsuite.get_testsuite(ts_name, "admin auto logout basic and backup restore", interactive_mode = attrs["interactive_mode"], combotest=True)
+
+    test_order = 1
+    test_added = 0
+    for test_params, testname, common_name, exc_level, is_cleanup in test_cfgs:
+        if testsuite.addTestCase(ts, testname, common_name, test_params, test_order, exc_level, is_cleanup) > 0:
+            test_added += 1
+        test_order += 1
+
+        print "Add test case with test name: %s\n\t\common name: %s" % (testname, common_name)
+
+    print "\n-- Summary: added %d test cases into test suite '%s'" % (test_added, ts.name)   
+    
+    
+ 
+if __name__ == "__main__":
+    _dict = kwlist.as_dict( sys.argv[1:] )
+    make_test_suite(**_dict)
+           
+    
+    
+    
+    
+    

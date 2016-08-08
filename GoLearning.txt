@@ -1,0 +1,76 @@
+
+
+
+GO编程哲学：
+C 面向过程，JAVA/C++面向对象
+1. Go语言反对函数和操作符重载(overload), 而C++,JAVA和C#都允许出现同名函数或操作符，只要他们的参数列表不同。
+2. GO语言支持类，类成员方法，类的组合，但反对继承，反对虚函数（virtual function)和纯虚函数重载。
+3. Go也提供了继承，只不过是采用了组合的文法来提供。
+type FOO struct {
+	Base
+	...
+}
+
+func (foo *FOO) Bar() {
+	....
+}
+
+4. Go语言放弃了构造函数(constructor)和析构函数（destructor)
+5. 接口（interface)
+Go语言中的接口与其他语言最大的一点区别是它的非侵入性，在C++,Java和C#中，为了实现一个接口，你需要从该接口继承，如：
+	Class Foo implements IFoo {	 //Java文法
+		...
+	}
+	
+	class Foo: public IFoo { //c++
+		....
+	}
+	
+	IFOO* foo = new Foo;
+	
+	在Go语言中，实现类的时候 无需从接口派生，如：
+	type Foo struct { //Go
+		...
+	}
+	var foo IFOO = new(Foo) 只要Foo实现了接口IFOO要求的所有方法，就实现了该接口，可以进行赋值。
+	对比： 
+	type ea int
+	var a ea = 1
+	
+	
+	
+	
+
+规范：
+1. 代码风格规范：
+a:	正确：	if expression {
+				。。。。
+			}
+	错误：	if expression
+			{
+		}
+b: 	要求public的变量必须以大写字母开头，private变量则以小写字母开头
+		
+
+2. 错误处理规范
+	f,err := os.Open(filename）
+		if err != nil {
+			log.Println("open file failed:" ,err)
+			return 
+		}
+		defer f.Close()
+		
+		
+		type error interface{
+			Error() string
+		}
+		
+3. 包管理
+	存放路径：src
+4. 契约规范（接口）
+5. 单元测试规范
+	命名规则："*_test.go"
+	ginkgo、gomega(BDD行为驱动开发）
+	执行方法：go test  或 ginkgo -v .
+6. 功能开发的流程规范
+

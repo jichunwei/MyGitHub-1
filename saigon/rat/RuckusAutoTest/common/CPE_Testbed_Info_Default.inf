@@ -1,0 +1,22 @@
+[TESTBED_INFO]
+# information use for creating new testbed in  RAT framework
+name        = CPE
+location    = SDC
+owner       = support@ruckuswireless.com
+
+[COMMON]
+# Common information of AP, Remote Stations
+sta_ip_list = ['192.168.1.11']
+target_ip_list = ['192.168.0.2', '192.168.0.10', '192.168.0.253', '192.168.0.252']
+ap_common_conf = {'username': 'super','password':'sp-admin', 'telnet':False}
+
+[AP_CONFIG]
+# Detail configuration for AP.
+mf7211 = ['192.168.0.175','192.168.0.174','192.168.0.173']
+mf2211 = ['192.168.0.166','192.168.0.169']
+
+[FW_UPGRADE_CONFIG]
+build_server = 'k2.video54.local'
+up_cfg_common = {'server_root_path':'C:/rwqaauto/firmware','server_ip':'192.168.0.10','ftp_user_name':'cherry','ftp_password':'123456'}
+up_cfg_mf7211 = {'target_build_stream': 'ZF7211_mainline','target_bno': '85','baseline_build_stream': 'ZF7211_mainline','baseline_bno':'61'}
+up_cfg_mf2211 = {'target_build_stream': 'MM2225_4.4.1.0_production','target_bno': '79','baseline_build_stream': 'MM2225_4.4.1.0_production','baseline_bno':'78'}

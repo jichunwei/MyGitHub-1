@@ -1,0 +1,412 @@
+"""
+Web authentication with different encryption type and AP is assigned to specified wlan group
+
+    Verify web authentication works well for different encryption type wlan.
+    Encryption type coverage:
+      Open-None
+      Open-WEP-64/
+      Open-WEP-128    
+      Shared-WEP-64
+      Shared-WEP-128
+      PSK-WPA-TKIP/AES/Auto
+      PSK-WPA2-TKIP/AES/Auto
+    
+    expect result: All steps should result properly.
+    
+    How to:
+        1) Create wlan and wlan group
+        2) Assign wlan to wlan group   
+        4) Assign active AP to specified wlan group
+        5) Station associate the wlan
+        6) Get station wifi address and verify it is in expected subnet
+        6) Verify station information in ZD, status is unauthorized
+        7) Verify station can't ping target ip
+        7) Perform web authentication in Station 
+        8) Verify station information in ZD, status is authorized
+        9) Verify station can ping target ip
+        10) Verify station can download a file from server
+        11) Verify station information in AP side        
+    
+Created on 2011-08-01
+@author: cherry.cheng@ruckuswireless.com
+"""
+
+import sys
+import time
+import random
+from copy import deepcopy
+
+import libZD_TestSuite as testsuite
+from RuckusAutoTest.common import lib_KwList as kwlist
+from RuckusAutoTest.common import lib_Constant as const
+from RuckusAutoTest.common import Ratutils as utils
+
+
+def _get_wlan_cfg(ssid, wlan_params):
+    wlanCfg = dict(ssid=ssid, auth="open", wpa_ver="", encryption="none", key_index="", key_string="",
+                   do_webauth=True, #auth_svr = "", #Default is local database.
+                   #username and password is for client to associate.
+                   username="", password="",)
+    wlanCfg.update(wlan_params)
+    return wlanCfg
+
+def _define_wlan_cfg(ssid, ras_name):
+    wlan_cfgs = []
+    
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="open", encryption="none")))
+    
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="open", encryption="WEP-64",auth_svr = ras_name,
+                                             key_index="1" , key_string=utils.make_random_string(10, "hex"))))
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="open", encryption="WEP-128",
+                                             key_index="1" , key_string=utils.make_random_string(26, "hex"))))
+    
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="shared", encryption="WEP-64",auth_svr = ras_name,
+                                             key_index="1" , key_string=utils.make_random_string(10, "hex"))))
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="shared", encryption="WEP-128",
+                                             key_index="2" , key_string=utils.make_random_string(26, "hex"))))
+    
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="PSK", wpa_ver="WPA", encryption="TKIP",auth_svr = ras_name,
+                                             key_string=utils.make_random_string(random.randint(8, 63), "hex"))))
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="PSK", wpa_ver="WPA", encryption="AES",
+                                             key_string=utils.make_random_string(random.randint(8, 63), "hex"))))
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="PSK", wpa_ver="WPA2", encryption="TKIP",auth_svr = ras_name,
+                                             key_string=utils.make_random_string(random.randint(8, 63), "hex"))))
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="PSK", wpa_ver="WPA2", encryption="AES",
+                                             key_string=utils.make_random_string(random.randint(8, 63), "hex"))))
+    wlan_cfgs.append(_get_wlan_cfg(ssid, dict(auth="PSK", wpa_ver="WPA_Mixed", encryption="Auto",auth_svr = ras_name,
+                                             key_string=utils.make_random_string(random.randint(8, 63), "hex"))))
+    
+    return wlan_cfgs
+
+def define_test_cfg(cfg):
+    test_cfgs = []
+    
+    ras_cfg = cfg['ras_cfg']
+    target_ip_addr = ras_cfg['server_addr']
+    radio_mode = cfg['radio_mode']
+    username = cfg['username']
+    password = cfg['password']
+    
+    sta_tag = 'sta%s' % radio_mode
+    browser_tag = 'browser%s' % radio_mode
+    ap_tag = 'ap%s' % radio_mode
+    
+    test_name = 'CB_ZD_Remove_All_Config'
+    common_name = 'Remove all configuration from ZD'
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Create_Authentication_Server'
+    common_name = 'Create Radius authentication server'
+    test_cfgs.append(({'auth_ser_cfg_list':[ras_cfg]}, test_name, common_name, 0, False))
+
+    test_name = 'CB_ZD_Create_Local_User'
+    common_name = 'Create Local User for Authentication'
+    test_cfgs.append(({'username':username,
+                       'password':password},
+                      test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Config_AP_Radio'
+    common_name = 'Config All APs Radio - Enable WLAN Service'
+    test_cfgs.append(({'cfg_type': 'teardown',
+                      'all_ap_mac_list': cfg['all_ap_mac_list']},
+                   test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Create_Station'
+    common_name = 'Create target station'
+    test_cfgs.append(({'sta_ip_addr':cfg['target_station'],
+                       'sta_tag': sta_tag}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_Station_Remove_All_Wlans'
+    common_name = 'Remove all wlans from station'
+    test_cfgs.append(({'sta_tag': sta_tag}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_Station_CaptivePortal_Start_Browser'
+    common_name = 'Start browser in station'
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'browser_tag':browser_tag}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Create_Active_AP'
+    common_name = 'Create active AP'
+    test_cfgs.append(({'active_ap':cfg['active_ap'],
+                       'ap_tag': ap_tag}, test_name, common_name, 0, False))
+    
+    wlans_cfg_list = cfg['wlan_cfg_list']
+    for wlan_cfg in wlans_cfg_list:        
+        if wlan_cfg.has_key('wpa_ver') and wlan_cfg['wpa_ver']:
+            is_wpa_auto = False
+            wpa_ver = wlan_cfg['wpa_ver']
+            if wpa_ver.lower().find('auto') > -1 or wpa_ver.lower().find('mixed') > -1:
+                is_wpa_auto = True
+                wpa_ver_list = ['WPA', 'WPA2']
+            else:
+                wpa_ver_list = [wpa_ver]
+            #If encryption is auto for wpa, verify TKIP and AES.
+            if wlan_cfg['encryption'].lower() == 'auto':
+                is_wpa_auto = True
+                encrypt_list = ['TKIP', 'AES']                    
+            else:
+                encrypt_list = [wlan_cfg['encryption']]
+            #Associate to wlans with different wpa version and encryption.
+            for wpa_version in wpa_ver_list:
+                wlan_cfg['sta_wpa_ver'] = wpa_version
+                for encrypt in encrypt_list:
+                    wlan_cfg['sta_encryption'] = encrypt
+                    test_cfgs.extend(_define_test_case_cfg(cfg, target_ip_addr, wlan_cfg, sta_tag, browser_tag, ap_tag, is_wpa_auto))
+        else:
+            test_cfgs.extend(_define_test_case_cfg(cfg, target_ip_addr, wlan_cfg, sta_tag, browser_tag, ap_tag))
+       
+    test_name = 'CB_Station_CaptivePortal_Quit_Browser'
+    common_name = 'Quit browser in Station'
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'browser_tag':browser_tag}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Remove_All_Wlan_Groups'
+    common_name = 'Remove all wlan group from ZD via GUI'
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+
+    test_name = 'CB_ZD_Remove_All_Wlans'
+    common_name = 'Remove all WLAN from ZD'
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Remove_All_Authentication_Server'
+    common_name = 'Remove all Authentication Server'
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    test_name = 'CB_ZD_Remove_All_Users'
+    common_name = 'Remove all users from ZD GUI after test'   
+    test_cfgs.append(({}, test_name, common_name, 0, False))
+    
+    return test_cfgs
+
+def _define_test_case_cfg(cfg, target_ip_addr, wlan_cfg, sta_tag, browser_tag, ap_tag, is_wpa_auto=False):
+    test_cfgs = []
+    
+    new_wlan_cfg = deepcopy(wlan_cfg)
+    
+    radio_mode = cfg['radio_mode']
+    expected_sub_mask = cfg['expected_sub_mask']
+    expected_subnet = cfg['expected_subnet']
+    username = cfg['username']
+    password = cfg['password']
+    
+    auth = new_wlan_cfg['auth']
+    encryption = new_wlan_cfg['encryption']
+    wpa_ver = new_wlan_cfg['wpa_ver']
+    key_index = new_wlan_cfg['key_index']
+    
+    sta_radio_mode = radio_mode
+    if sta_radio_mode == 'bg':
+        sta_radio_mode = 'g'
+    
+    wlan_encrypt = '%s_%s' % (auth, encryption)
+    if wpa_ver:
+        wlan_encrypt = wlan_encrypt + '_%s' % (wpa_ver,)
+    if key_index:
+        wlan_encrypt = wlan_encrypt + '_%s' % (key_index,)
+        
+    ssid = "%s-%05d" % (wlan_encrypt, random.randrange(1, 99999))  
+    new_wlan_cfg['ssid'] = ssid    
+    
+    wg_name = 'wg-%s-%03d' % (wlan_encrypt, random.randrange(1, 999))
+    wg_cfg = dict(name=wg_name, description='wg for %s' % (wlan_encrypt))
+    
+    if wpa_ver and is_wpa_auto:
+        wlan_encrypt = wlan_encrypt + '_STA_%s_%s' % (new_wlan_cfg['sta_wpa_ver'], new_wlan_cfg['sta_encryption'])
+            
+    test_case_name = '[%s]' % (wlan_encrypt,)
+    
+    test_name = 'CB_ZD_Create_Wlans_Wg_Assign_Wlan_AP'
+    common_name = '%sCreate wlans, wlan group and assign wlan and ap to group' % (test_case_name,)
+    test_cfgs.append(({'wlan_cfg_list':[new_wlan_cfg],
+                       'enable_wlan_on_default_wlan_group': False,
+                       'wgs_cfg': wg_cfg,
+                       'ap_tag': ap_tag,
+                       'radio_mode': radio_mode}, test_name, common_name, 1, False))
+    
+    expect_ap_wlan_cfg = _define_expect_wlan_info_in_ap(cfg, new_wlan_cfg)
+    test_name = 'CB_ZD_Verify_Wlan_Info_In_AP'
+    common_name = '%sVerify the wlan on the active AP' % (test_case_name)
+    test_cfgs.append(({'expect_wlan_info': expect_ap_wlan_cfg,
+                       'ap_tag': ap_tag}, test_name, common_name, 2, False))
+    
+    test_name = 'CB_ZD_Associate_Station_1'
+    common_name = '%sAssociate the station to the wlan' % (test_case_name,)
+    test_cfgs.append(({'wlan_cfg': new_wlan_cfg,
+                       'sta_tag': sta_tag}, test_name, common_name, 2, False))
+
+    test_name = 'CB_ZD_Get_Station_Wifi_Addr_1'
+    common_name = '%sGet wifi address of the station' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag}, test_name, common_name, 2, False))
+    
+    test_name = 'CB_Station_Verify_Expected_Subnet'
+    common_name = '%sVerify station wifi ip address in expected subnet' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'expected_subnet': '%s/%s' % (expected_subnet, expected_sub_mask)},
+                      test_name, common_name, 2, False))
+    
+    test_name = 'CB_ZD_Verify_Station_Info_V2'
+    common_name = '%sVerify client is unauthorized in ZD' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'ap_tag': ap_tag,
+                       'status': 'unauthorized',
+                       'wlan_cfg': new_wlan_cfg,
+                       'radio_mode':sta_radio_mode,
+                       'username': username, },
+                      test_name, common_name, 2, False))
+    
+    test_name = 'CB_ZD_Client_Ping_Dest'
+    common_name = '%sVerify client should not ping a target IP' % (test_case_name)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'condition': 'disallowed',
+                       'target': target_ip_addr},
+                      test_name, common_name, 2, False))
+
+    test_name = 'CB_Station_CaptivePortal_Perform_WebAuth'
+    common_name = '%sConfigure station to perform web authentication' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'browser_tag': browser_tag,
+                       'username': username,
+                       'password': password,
+                       #'target_url': 'http://%s/' % target_ip_addr,
+                       },test_name, common_name, 2, False))
+
+    test_name = 'CB_ZD_Verify_Station_Info_V2'
+    common_name = '%sVerify client information in ZD' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'ap_tag': ap_tag,
+                       'status': 'authorized',
+                       'wlan_cfg': new_wlan_cfg,
+                       'radio_mode':sta_radio_mode,
+                       'username': username, },
+                       test_name, common_name, 2, False))
+
+    test_name = 'CB_ZD_Client_Ping_Dest'
+    common_name = '%sVerify client can ping a target IP' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'condition': 'allowed',
+                       'target': target_ip_addr}, test_name, common_name, 2, False))
+    
+    test_name = 'CB_Station_CaptivePortal_Download_File'
+    common_name = '%sVerify download file from server' % (test_case_name,)
+    test_cfgs.append(({'sta_tag': sta_tag,
+                       'browser_tag': browser_tag,
+                       #'validation_url': "http://%s/authenticated/" % target_ip_addr,
+                       }, test_name, common_name, 2, False))
+    
+    test_name = 'CB_ZD_Verify_Station_Info_On_AP_V2'
+    common_name = '%sVerify the station information in AP' % (test_case_name,)
+    test_cfgs.append(({'ssid': new_wlan_cfg['ssid'],
+                       'ap_tag': ap_tag,
+                       'sta_tag': sta_tag}, test_name, common_name, 2, False))
+    
+    test_name = 'CB_Station_Remove_All_Wlans'
+    common_name = 'Remove the wlan %s from station' % (new_wlan_cfg['ssid'])
+    test_cfgs.append(({'sta_tag': sta_tag}, test_name, common_name, 0, False))
+        
+    return test_cfgs
+
+def _define_expect_wlan_info_in_ap(tcfg, wlan_cfg):
+    if type(tcfg['radio_mode']) == list:
+        radio_mode_list = tcfg['radio_mode']
+    else:
+        radio_mode_list = [tcfg['radio_mode']]                                                                                                          
+    
+    expect_wlan_info = dict()
+    for radio in radio_mode_list:
+        status = 'up'
+        if radio in ['bg', 'ng']:            
+            wlan_name = "wlan0"
+            expect_wlan_info[wlan_name] = {}
+            expect_wlan_info[wlan_name]['status'] = status
+            expect_wlan_info[wlan_name]['encryption_cfg'] = dict(ssid=wlan_cfg['ssid'])
+        elif radio in ['na']:
+            MAXIMUM_WLAN = 8
+            wlan_name = "wlan%d" % (MAXIMUM_WLAN)
+            expect_wlan_info[wlan_name] = {}
+            expect_wlan_info[wlan_name]['status'] = status
+            expect_wlan_info[wlan_name]['encryption_cfg'] = dict(ssid=wlan_cfg['ssid'])
+
+    return expect_wlan_info
+
+def createTestSuite(**kwargs):
+    ts_cfg = dict(interactive_mode=True,
+                 station=(0, "g"),
+                 targetap=False,
+                 testsuite_name="",
+                 )
+    ts_cfg.update(kwargs)
+
+    tb = testsuite.getTestbed2(**kwargs)
+    tbcfg = testsuite.getTestbedConfig(tb)
+
+    username = 'ras.local.user'
+    password = 'ras.local.user'
+    expected_sub_mask = '255.255.255.0'
+    
+    sta_ip_list = tbcfg['sta_ip_list']
+    ap_sym_dict = tbcfg['ap_sym_dict']
+    all_ap_mac_list = tbcfg['ap_mac_list']
+        
+    ras_ip_addr = testsuite.getTestbedServerIp(tbcfg)
+    
+    if ts_cfg["interactive_mode"]:
+        target_sta = testsuite.getTargetStation(sta_ip_list)
+        target_sta_radio = testsuite.get_target_sta_radio()
+    else:        
+        target_sta = sta_ip_list[ts_cfg["station"][0]]
+        target_sta_radio = ts_cfg["station"][1]
+        
+    active_ap = None
+    for ap_sym_name, ap_info in ap_sym_dict.items():
+        ap_support_radio_list = const._ap_model_info[ap_info['model'].lower()]['radios']
+        if target_sta_radio in ap_support_radio_list:
+            active_ap = ap_sym_name
+            break
+                
+    ssid = ""
+    ras_name = 'ruckus-radius-%s' % (time.strftime("%H%M%S"),)
+    
+    wlan_cfg_list = _define_wlan_cfg(ssid, ras_name)
+    
+    tcfg = {'ras_cfg': {'server_addr': ras_ip_addr,
+                        'server_port' : '1812',
+                        'server_name' : ras_name,
+                        'radius_auth_secret': '1234567890',
+                        },
+            'target_station':'%s' % target_sta,
+            'active_ap':'%s' % active_ap,
+            'all_ap_mac_list': all_ap_mac_list,
+            'radio_mode': target_sta_radio,
+            'wlan_cfg_list': wlan_cfg_list,
+            'expected_sub_mask': expected_sub_mask,
+            'expected_subnet': utils.get_network_address(ras_ip_addr, expected_sub_mask),
+            'username': username,
+            'password': password
+            }
+    
+    ap_model = ap_sym_dict[active_ap]['model']
+    
+    test_cfgs = define_test_cfg(tcfg)
+    
+    if ts_cfg["testsuite_name"]:
+        ts_name = ts_cfg["testsuite_name"]
+    else:
+        ts_name = "Web Auth Encryption Types with Wlan Group - 11%s %s" % (target_sta_radio, ap_model)
+
+    ts = testsuite.get_testsuite(ts_name, "Verify deploy WLANs with different encryption types and wlan group properly - 11%s radio" % target_sta_radio, combotest=True)
+
+    test_order = 1
+    test_added = 0
+    for test_params, testname, common_name, exc_level, is_cleanup in test_cfgs:
+        if testsuite.addTestCase(ts, testname, common_name, test_params, test_order, exc_level, is_cleanup) > 0:
+            test_added += 1
+            test_order += 1
+
+            print "Add test case with test name: %s\n\t\common name: %s" % (testname, common_name)
+
+    print "\n-- Summary: added %d test cases into test suite '%s'" % (test_added, ts.name)
+
+if __name__ == "__main__":
+    _dict = kwlist.as_dict(sys.argv[1:])
+    createTestSuite(**_dict)
+

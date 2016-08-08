@@ -1,0 +1,9 @@
+
+Implementations of different types of testbeds go in here -- one class implementation per file.
+
+Note that the name of the testbed class must match the name of the file for ease of runtime-reference.
+
+Nothing other than testbed classes should go in this directory since database initialization code introspects
+this module and assumes everything under here is a TestbedType that should be added to the database!
+
+

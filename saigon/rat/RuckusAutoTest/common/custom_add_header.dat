@@ -1,0 +1,28 @@
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <custom_src> <profile_name>" >&2
+    exit 1
+fi
+src=$1
+prof=$2
+dt=`date +%s`
+
+tmp1=/tmp/customhdr.$$
+tmp2=/tmp/customhdr2.$$
+
+trap "rm -f ${tmp1} ${tmp2}; exit" 0 1 2 3 15
+
+sed '/^#-/d' ${src} > ${tmp1}
+
+marker=MMMMMMMMMM
+cat - ${tmp1} > ${tmp2} << :END
+#- 1
+#- 1
+#- ${prof}
+#- ${dt}
+:END
+
+md5=`md5sum ${tmp2} |  ( read m n ; echo -n $m )`
+
+sed "1i #- ${md5}" < ${tmp2}
+
+exit 0

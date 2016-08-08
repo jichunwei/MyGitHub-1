@@ -1,0 +1,37 @@
+{% extends "admin/base_site.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block coltype %}flex{% endblock %}
+{% block content %}
+<h1>Weekly Report Usage</h1>
+<div id="content-main">  
+ <table cellspacing="0" id="viewer">
+  <thead>
+    <tr>
+      <th>Testbed ID</th>
+      <th>Logical Testbeds</th>
+      <th>Week One</th>
+      <th>Week Two</th>
+      <th>Week Three</th>
+      <th>Week Four</th>
+    </tr>
+  </thead>
+<tbody>
+    {% for item in Weekly_Usage %}		
+    <tr class="{% cycle 'row1' 'row2' %}">  
+        <th>{{forloop.counter}}</th>
+        <td>{{item.tbid}}</td>        
+        <td>{{item.logical_tb}}</td>
+        <td>{{item.weeks['1'].status}}</td>
+        <td>{{item.weeks['2'].status}}</td>
+        <td>{{item.weeks['3'].status}}</td>
+        <td>{{item.weeks['4'].status}}</td>        
+    </tr>	
+    {% endfor %}
+    </tbody>  
+  </table> 
+</div>
+{% endblock %}

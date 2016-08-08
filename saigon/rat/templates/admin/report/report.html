@@ -1,0 +1,88 @@
+{% extends "admin/base_site.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+
+{% if not is_popup %}{% block breadcrumbs %}<div class="breadcrumbs"><a href="../../admin/">{% trans "Home" %}</a> &rsaquo; Report</div>{% endblock %}{% endif %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+<h1>RuckusAutoTest Report</h1>
+<div id="content-main">
+  <div class="module" id="changelist">
+  <table cellspacing="0">	
+  <thead>		
+    <tr>   
+      <th>No.</th> 
+      <th>Test bed</th> 
+      <th>Build</th>
+      <th>Duration</th>
+      <th>Pass</th> 
+      <th>Fail</th> 
+      <th>Error</th> 
+      <th>N/A</th> 
+      <th>Not Run</th> 
+      <th>Pass %</th> 
+      <th>Fail %</th> 
+      <th>Error %</th> 
+      <th>N/A %</th> 
+      <th>Not Run %</th> 
+      <th>Total TCs</th>
+      <th>Status</th>
+      <th>subtest<br />info</th>
+    </tr>  
+  </thead>      
+  <tbody>
+    {% for batch in Batchs_Summary %}		
+    <tr class="{% cycle 'row1' 'row2' %}">  
+        <th>{{forloop.counter}}</th>
+        <td>{{batch.testbed}}</td>
+        <td><a href="../reportdetail/{{batch.id}}?detail=False&tbname={{batch.testbed}}">{{batch.build}}</a></td>
+        <td>{{batch.Duration}}</td>
+        <td>{{batch.PASS}}</td>
+        <td>{{batch.FAIL}}</td>
+        <td>{{batch.ERROR}}</td>
+        <td>{{batch.NA}}</td>
+        <td>{{batch.NOTRUN}}</td>
+        <td>{{batch.Pass_Percent}}</td>
+        <td>{{batch.Fail_Percent}}</td>
+        <td>{{batch.Error_Percent}}</td>
+        <td>{{batch.NA_Percent}}</td>
+        <td>{{batch.NotRun_Percent}}</td>
+        <td>{{batch.TotalRun}}</td>
+        <td>{{batch.Status}}</td>            
+        <td style="color:seagreen;">{{batch.SubTestInfo}}</td>
+    </tr>	
+    {% endfor %}
+    </tbody>  
+  </table>
+  <p class="paginator">{{TotalBatch}} batch</p>  
+  </div>
+  <div class="module" id="changelist" style="width:50%;">
+  <table cellspacing="0">	
+  <tbody>
+    <tr class="row1">
+      <th>Error</th>
+      <td>Testbed enviroment cause script can not run as design</td>
+    </tr>
+    <tr class="row2">
+      <th>N/A</th>
+      <td>Some test cases in the test suites are not applicate on the current build</td>
+    </tr>
+    <tr class="row1">
+      <th>Not Run</th>
+      <td>Test cases are in the batch are waiting for running</td>
+    </tr>    
+    <tr class="row2">
+      <th>subtest info</th>
+      <td>If presented, the batch contains at least one combo test. The values displayed are in the format of: <span style="color:seagreen;">Pass/Fail/Error NA/NotRun No.ComboTestSuite/TotalTestSuite</span>.<br />NOTE: A combo test, no matter how many sub tests it contains, is countered as one test.</td>
+    </tr>
+  </tbody>
+  </table>
+  <p class="paginator">&nbsp;</p>
+  </div>
+</div>
+{% endblock %}

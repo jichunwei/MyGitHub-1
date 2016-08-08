@@ -1,0 +1,182 @@
+[Chowchow]
+
+wlan_if = wlan0
+
+# qosgroup
+qosgroup_classification = enable
+qosgroup_media_type = voice
+qosgroup_heuristics_classify_octet = 1000
+qosgroup_heuristics_nocalssify_octet = 9000
+qosgroup_heuristics_ipg_min = 10
+qosgroup_heuristics_ipg_max = 250
+qosgroup_heuristics_pktlen_min = 100
+qosgroup_heuristics_pktlen_max = 450
+
+qosgroup_tos_classify_value = 0xD0
+qosgroup_tos_marking_value = 0x18
+qosgroup_txfailthreshold = 70
+qosgroup_directed_threshold = 60
+qosgroup_heuristics_status = disable
+qosgroup_directed_multicast = disable
+qosgroup_igmp_snooping = disable
+qosgroup_mld_snooping = enable
+qosgroup_tos_classify = disable
+qosgroup_tos_mark = enable
+qosgroup_layer2_mac = 00:11:22:33:44:55
+qosgroup_filter_action = tos
+qosgroup_layer3_ip = 192.168.1.0/255.255.255.0
+qosgroup_layer4_port = 1000
+qosgroup_query_interval = 200
+qosgroup_aging = disable
+qosgroup_igmp_query_ver = v2
+qosgroup_igmp_query_sta = enable
+qosgroup_mld_query_ver = v1
+qosgroup_mld_query_sta = enable
+
+# Radio group
+radiogrp_80211h_sta = enable
+radiogrp_system = maxinterop
+radiogroup_ap_bridge = disable
+radiogroup_autoprov = enable
+radiogroup_beacon_intval = 200
+radiogroup_countermeasure = disable
+radiogroup_ctrycode = BE
+radiogroup_countryie = enable
+radiogroup_cwmin_adapt = enable
+radiogroup_cwmode = 0 
+radiogroup_dtim_period = 10
+radiogroup_invisible = enable
+radiogroup_rxchainmask = 5
+radiogroup_txchainmask = 5
+radiogroup_legacytxchainmask = 7
+
+# If wlan is in 2.4GHz
+radiogroup_channel = 6
+
+radiogroup_keystring = 1234567890
+radiogroup_encryption = TKIP
+radiogroup_auth = PSK
+radiogroup_wpa_ver = WPA2
+
+radiogroup_event_assoc_thr = 6
+radiogroup_event_assoc_period = 17
+radiogroup_event_auth_period = 23
+radiogroup_event_rssi_thr = 33
+radiogroup_event_rssi_period = 25
+radiogroup_event_vid_drop_thr = 36
+radiogroup_event_vid_drop_period = 37
+radiogroup_event_vo_drop_thr = 21
+radiogroup_event_vo_drop_period = 12
+radiogroup_event_obss_thr = 101
+radiogroup_event_obss_period = 42
+radiogroup_event_crc_thr = 2002
+radiogroup_event_crc_period = 104
+radiogroup_event_clcs_period = 205
+
+radiogroup_ssid = test_rsm
+radiogroup_ssid_suppress = enable
+radiogroup_state = up
+radiogroup_rts_thr = 10
+radiogroup_rescan_exp = 10
+radiogroup_rescan_min = 5
+radiogroup_rescan_max = 5000
+radiogroup_vodetect = disable
+radiogroup_txpower = quarter
+radiogroup_wds_mode = disable
+radiogroup_wlantext = verify_wlantext
+radiogroup_wmm = disable
+
+radiogroup_mqclass2pri_voice = 0
+radiogroup_mqclass2pri_video = 3
+radiogroup_mqclass2pri_be = 5
+radiogroup_mqclass2pri_bk = 6
+
+radiogroup_dvlan = enable
+radiogroup_fixed_rate = 54Mb
+radiogroup_frag_thr = 300
+radiogroup_11h_status = enable
+radiogroup_max_aid = 80
+radiogroup_minrate = 10
+radiogroup_prot_mode = rts-cts
+radiogroup_bandsteering = 20
+
+radiogroup_mq_pscredit = 15
+radiogroup_mq_credit = 3 5
+radiogroup_mq_qtime = 2500 2500 9000 30
+radiogroup_mq_maxpkts = 900 800 700 600
+
+radiogroup_atcf_nasidsel = 0
+radiogroup_atcf_ssidsel = 1
+radiogroup_atcf_ssidpre = cc
+radiogroup_atcf_weplen = 13
+radiogroup_atcf_wpalen = 13
+
+radiogroup_dfs_status = disable
+radiogroup_dfs_cactime = 80
+radiogroup_dfs_notime = 2000
+radiogroup_dfs_blkchans = enable
+radiogroup_distance = 1800
+radiogroup_azxis = enable
+
+# System Group
+systemgroup_bonjour = disable
+systemgroup_device_location = QARuckus
+systemgroup_device_name = ChowChow
+systemgroup_dhcpc_opt60 = RuckusCC
+systemgroup_dns_ip_addr1 = 192.168.50.100
+systemgroup_eth_mon = 50
+
+systemgroup_fw_control = fw7363
+systemgroup_fw_host = 192.168.100.100
+systemgroup_fw_proto = ftp
+systemgroup_fw_user = lab
+systemgroup_fw_pass = lab4man1
+
+systemgroup_http = enable
+systemgroup_https = enable
+systemgroup_internal_heater = enable
+systemgroup_snmp_ip = 192.168.50.111
+systemgroup_snmp_rw_community = rw_rule
+systemgroup_snmp_ro_community = ro_rule
+systemgroup_snmp_acl_status = enable
+systemgroup_snmp_acl_entry_1 = 192.168.100.100
+systemgroup_snmp_acl_entry_2 = 192.168.10.10
+
+systemgroup_syslog_status = enable
+systemgroup_syslog_ipv4 = 192.168.40.100
+systemgroup_syslog_port = 1001
+systemgroup_syslog_network = 5
+systemgroup_syslog_local = 6
+
+systemgroup_thermo = 40
+systemgroup_timeout = 3000
+
+systemgroup_tr069_url = http://ruckuswireless.com
+systemgroup_tr069_intval = 300
+systemgroup_tr069_user = acs_user
+systemgroup_tr069_pass = acs_pass
+systemgroup_tr069_digest_user = cpe_user
+systemgroup_tr069_digest_pass = cpe_pass
+systemgroup_model_display = RuckusZF
+systemgroup_orientation = 40
+systemgroup_ntp_server_ip_addr = 192.168.50.100
+systemgroup_ssh_status = disable
+systemgroup_poeout = enable
+systemgroup_remote_mgmt_option = snmp
+systemgroup_aerosct_status = enable
+
+# vlangroup
+vlangroup_vlan_id = 10
+vlangroup_vlan_name = testvlan
+vlangroup_vlan_clone_id = 20
+vlangroup_new_vlan_id = 30
+vlangroup_wlan_native = 2
+vlangroup_mgmt_vlan = 100
+
+# ACL group
+aclgroup_action = allow
+aclgroup_entry_1 = 00:11:22:33:44:55
+aclgroup_entry_2 = 11:22:33:44:55:66
+
+shaper_downlink = 1mbps
+shaper_uplink = 2mbps

@@ -1,0 +1,170 @@
+{% extends "admin/base_site.html" %}
+
+{% load adminmedia admin_list i18n %}
+{% load dajaxice_templatetags %}
+
+{% block extrastyle %}{{ block.super }}
+{% dajaxice_js_import %}
+<style type="text/css">
+	ul {
+	    width: 700px;
+	    list-style-type:none;
+	}
+	li {
+	    width:180px;
+	    margin:15px 0 0 0;
+	    padding:0 10px 0 0;
+	    line-height:15px;
+	    float:left;
+	}
+</style>
+
+<script type="text/javascript" charset="utf-8">
+	$=function(id){return document.getElementById(id);}
+	setv = function(v){$('show').innerHTML = "<h1>" + v + "</h1>";}
+	function callback_batchviewer(data){	    
+		if(data!=Dajaxice.EXCEPTION){
+		    if(!data.map_list){return;}
+		    	
+		    tbl = $('viewer_tbl');
+		    while (tbl.hasChildNodes()) 
+		    { 
+               tbl.removeChild(tbl.lastChild);
+            }
+            
+			len = data.map_list.length;
+			s_len = data.suite_list.length;			
+			td_creator = function(v){
+				var td_tag = document.createElement('td');
+				var td_txt = document.createTextNode(v);
+				td_tag.appendChild(td_txt);				
+				return td_tag;
+			}
+			
+			th_creator = function(v){
+				var th_tag = document.createElement('th');
+				var th_txt = document.createTextNode(v);	
+				th_tag.setAttribute('height','26');			
+				th_tag.appendChild(th_txt);
+				return th_tag;
+			}		
+			
+			for(var j=0;j<s_len;j++){
+				var ts = data.suite_list[j];
+				var ts_header = document.createElement("thead");
+
+				var ts_tag = document.createElement("tr");
+				ts_tag.valign = "middle";
+				var id_th = document.createElement("th");
+				id_th.innerHTML = ts[0];
+				id_th.height="25px";
+				ts_tag.appendChild(id_th);
+
+				var name_th = document.createElement("th");
+				name_th.innerHTML = ts[1];
+				name_th.height = "25px";
+				name_th.colSpan = "4";
+				ts_tag.appendChild(name_th);
+				ts_header.appendChild(ts_tag);
+
+				var sthead = document.createElement('thead');
+				var str = document.createElement('tr');
+				str.appendChild(th_creator('TestRun ID'));
+				str.appendChild(th_creator('TestCase TCID'));
+				str.appendChild(th_creator('Rat TestRun'));
+				str.appendChild(th_creator('Plan TestCase'));
+				str.appendChild(th_creator('Satus'));
+				sthead.appendChild(str);
+
+				fnd = false;
+				var tbody = document.createElement("tbody");
+				for(var i=0;i<len;i++){
+					var tc = data.map_list[i];
+					if(tc.sid!=ts[0])continue;
+					fnd = true;
+					var tr_tag = document.createElement("tr");
+					if(i%2){
+						tr_tag.className ="row1";
+					}
+					else{
+						tr_tag.className ="row2";
+					}
+					var link_tag = document.createElement('a');
+					link_tag.href = "../Testlink/testrunmap/" + tc.id + "/";
+					link_tag.innerHTML = tc.testrun_id
+
+					tr_tag.appendChild(document.createElement('td').appendChild(link_tag));
+
+					tr_tag.appendChild(td_creator(tc.testcase_tc_id));
+					tr_tag.appendChild(td_creator(tc.common_name));
+					tr_tag.appendChild(td_creator(tc.plan_name));
+					tr_tag.appendChild(td_creator(tc.status));
+					tbody.appendChild(tr_tag);
+				}
+				if(fnd){
+					$('viewer_tbl').appendChild(ts_header);
+					$('viewer_tbl').appendChild(sthead);
+				}				   		
+				    
+				$('viewer_tbl').appendChild(tbody);
+			}
+			setv('Total: ' + len);
+		}
+		else{
+			setv(data.message);
+		}
+	}
+</script>
+
+{% endblock %}
+
+
+{% block bodyclass %}change-list{% endblock %}
+
+
+{% if not is_popup %}{% block breadcrumbs %}<div class="breadcrumbs"><a href="../../admin/">{% trans "Home" %}</a> &rsaquo; Viewer</div>{% endblock %}{% endif %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+<h1>Rat-TestLink relation batch viewer</h1>
+<div id="content-main">
+  <div class="module" id="changelist">
+	<div id="searchpanel" class="module filtered" style="height:50px"><!-- DIV needed for valid HTML -->
+		<label for="searchbar"><img src="/media/img/admin/icon_searchbox.png" alt="Search"></label>
+		<select name='filter_testcase' id='filter_testcase' onchange="Dajaxice.rat.Testlink.search_test_run_map(callback_batchviewer, {'batch_id':this.value, 'chk':$('disputed_chk').checked});">
+			<option value>---------</option>
+			{% for batch in batch_list %}
+				<option value="{{ batch.id }}">
+				<ul>
+					<li>{{ batch.id }}</li>
+					<li>{{ batch.testbed.name }}</li>
+					<li>{{ batch.build.build_stream }}</li>
+					<li>{{ batch.build.number }}</li>
+				</ul>
+				</option>
+			{% endfor %}
+		</select>
+		<input type="checkbox" id="disputed_chk" onchange="Dajaxice.rat.Testlink.search_test_run_map(callback_batchviewer, {'batch_id':$('filter_testcase').value, 'chk':this.checked});"/>
+		<label>Disputed</label>
+	</div>
+ <table cellspacing="0" id="viewer_tbl">
+  <thead>
+    <tr>
+      <th>TestRun ID</th>
+      <th>TestCase TCID</th>
+      <th>Rat TestRun</th>
+      <th>Plan TestCase</th>
+      <th>Satus</th>
+    </tr>
+  </thead>
+  </table>
+
+  <div>
+  <span id="show">
+  </span>
+  </div>
+  	<p class="paginator">&nbsp;</p>
+  </div>
+</div>
+{% endblock %}
