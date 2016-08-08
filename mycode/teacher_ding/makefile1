@@ -1,0 +1,16 @@
+
+bin/sstring:obj/sstring.o
+	gcc obj/sstring.o -o bin/sstring
+
+obj/sstring.o:sstring.s
+	gcc -c sstring.s -o obj/sstring.o
+
+sstring.s: sstring.i
+	gcc -S sstring.i -o sstring.s
+
+sstring.i:include/sstring.h src/sstring.c
+	gcc -E -I./include src/sstring.c -o sstring.i
+
+clean: 
+	rm -fr *.i *.s
+

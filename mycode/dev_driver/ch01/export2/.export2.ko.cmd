@@ -1,0 +1,1 @@
+cmd_/home/tan/dev_driver/ch01/export2/export2.ko := ld -r -m elf_i386  --build-id -o /home/tan/dev_driver/ch01/export2/export2.ko /home/tan/dev_driver/ch01/export2/export2.o /home/tan/dev_driver/ch01/export2/export2.mod.o

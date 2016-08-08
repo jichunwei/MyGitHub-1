@@ -1,0 +1,8 @@
+tan 01 24 hunan 98
+wang 02 21 anhui 99
+chen 03 23 beijing 100
+liu 04 21  hefei 19
+hua 05 24 hongkong 97
+zhang 06 23 guangdong 56
+wan 07 48 heilongjiang 97
+si 08 34 buzhidao 97

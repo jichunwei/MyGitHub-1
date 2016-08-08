@@ -1,0 +1,32 @@
+
+
+udp server:
+1,construct the socket(socket);
+2,construct the sockaddr in struct and fill the data(server ip,server port);
+3,bind the socket and sockaddr in struct(bind);
+4,receive the data from client to get ip and port for client(recv,recvfrom);
+5,send the respond to client (send,sendto);
+6,release the resource(close);
+
+send:
+MSG_DONTROUTE
+MSG_DONTWAIT
+MSG_OOB
+
+recv:
+MSG_OOB
+MSG_PEEK
+MSG_TRUNC
+
+
+***********
+udp client
+1,construct the socket
+2,construct the sockaddr_in struct and fill the data(server ip,server port)
+3,set the default destination(connect)[option];
+4,send the data to server or default destination(sendto,send);
+5,recive the data from server(recv,recvfrom);
+6,release the resource(close);
+
+
+

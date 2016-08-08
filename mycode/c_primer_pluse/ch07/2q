@@ -1,0 +1,20 @@
+#include<stdio.h>
+int main()
+{
+    int a,b;
+    printf("enter a:");
+    while(scanf("%d",&a)==1)
+    {
+     printf("a=%d\n",a);
+     printf("enter b:");
+     if(scanf("%d",&b)==1)
+     printf("b=%d\n",b);
+     printf("s=%d\n",a*b);
+     printf("enter next a:");
+     break;
+    }
+    printf("done!\n");
+    return 0;
+}
+
+        

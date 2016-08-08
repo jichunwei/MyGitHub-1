@@ -1,0 +1,49 @@
+[?1000h[?1049h[?1h=[1;24r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[24;1H"limits.conf" "limits.conf" [只读] 52L, 1934C[1;1H[33m  1 [m[36m# /etc/security/limits.conf[m
+[33m  2 [m[36m#[m
+[33m  3 [m[36m#Each line describes a limit for a user in the form:[m
+[33m  4 [m[36m#[m
+[33m  5 [m[36m#<domain>        <type>  <item>  <value>[m
+[33m  6 [m[36m#[m
+[33m  7 [m[36m#Where:[m
+[33m  8 [m[36m#<domain> can be:[m
+[33m  9 [m[36m#        - an user name[m
+[33m 10 [m[36m#        - a group name, with @group syntax[m
+[33m 11 [m[36m#        - the wildcard *, for default entry[m
+[33m 12 [m[36m#        - the wildcard %, can be also used with %group syntax,[m
+[33m 13 [m[36m#                 for maxlogin limit[m
+[33m 14 [m[36m#[m
+[33m 15 [m[36m#<type> can have the two values:[m
+[33m 16 [m[36m#        - "soft" for enforcing the soft limits[m
+[33m 17 [m[36m#        - "hard" for enforcing hard limits[m
+[33m 18 [m[36m#[m
+[33m 19 [m[36m#<item> can be one of the following:[m
+[33m 20 [m[36m#        - core - limits the core file size (KB)[m
+[33m 21 [m[36m#        - data - max data size (KB)[m
+[33m 22 [m[36m#        - fsize - maximum filesize (KB)[m
+[33m 23 [m[36m#        - memlock - max locked-in-memory address space (KB)[m[24;63H1,1          顶端[1;5H[?12l[?25h[?25l[24;53H^[        [1;5H[24;53H^[[       [1;5H[24;53H^[[A      [1;5H[?12l[?25h[?25l[24;53H          [1;5H[?12l[?25h[?25l[24;53H[A        [1;5H[24;53H          [1;5H[?12l[?25h[?25l[24;53H^[        [1;5H[24;53H^[[       [1;5H[24;53H^[[A      [1;5H[?12l[?25h[?25l[24;53H          [1;5H[?12l[?25h[?25l[24;53H[A        [1;5H[24;53H          [1;5H[?12l[?25h[?25l[24;53Hh         [1;5H[24;53H          [1;5H[?12l[?25h[?25l[24;53Hj         [1;5H[24;53H          [2;5H[24;63H2,1          [2;5H[?12l[?25h[?25l[24;53Hj         [2;5H[24;53H          [3;5H[24;63H3,1          [3;5H[?12l[?25h[?25l[24;53Hj         [3;5H[24;53H          [4;5H[24;63H4,1          [4;5H[?12l[?25h[?25l[24;53Hg         [4;5H[?12l[?25h[?25l[24;53H          [4;5H[24;53Hgj        [4;5H[24;53H          [5;5H[24;63H5,1          [5;5H[?12l[?25h[?25l[24;53Ha         [5;5H[24;53H          [5;6H[24;1H[33m-- 插入 --[m[24;11H[K[24;63H5,2          顶端[24;12H[31mW10: 警告: 正在修改一个只读文件[m[24;63H[K[?1000l[?1000h[5;6H[36mgj1k<domain>        <type>  <item>  <value>[5;10H[mj[24;53H^[        [5;10H[24;53H^[j       [5;10H[?12l[?25h[?25l[24;53H          [5;10H[36m<[m[24;1H[K[24;63H5,5          顶端[5;9H[?12l[?25h[?25l[24;63H6,1          [6;5H[?12l[?25h[?25l[24;53Hk         [6;5H[24;53H          [5;9H[24;63H5,5          [5;9H[?12l[?25h[?25l[24;53H^M        [5;9H[24;53H          [6;5H[24;63H6,1          [6;5H[?12l[?25h[?25l[24;53H^[        [6;5H[?12l[?25h[?25l[24;53H          [6;5H[24;1H输入  :quit<Enter>  退出 Vim[24;63H[K[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;53Hc         [6;5H[?12l[?25h[?25l[24;53H          [6;5H[?12l[?25h[?25l[24;53H^A        [6;5H[24;53H          [6;5H[?12l[?25h[?25l[24;53H^A        [6;5H[24;53H          [6;5H[?12l[?25h[?25l[24;53H^A        [6;5H[24;53H          [6;5H[?12l[?25h[?25l[24;53H^V        [6;5H[24;53H1x1       [6;5H[7m[36m#[m[24;1H[33m-- 可视 块 --[m[24;14H[K[24;53H1x1       [6;5H[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;53H^V        [6;5H[24;53H          [6;5H[36m#[m[24;1H[K[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;1H输入  :quit<Enter>  退出 Vim[24;63H[K[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;5H  :quit<Enter>  [4C Vim[24;63H[K[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;5H  :quit<Enter>  [4C Vim[24;63H[K[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;53H^[        [6;5H[?12l[?25h[?25l[24;53H          [6;5H[?12l[?25h[?25l[24;53H:         [6;5H[24;1H[K[24;1H:[?12l[?25hj[?25l:j[?12l[?25hl[?25l:jl[?12l[?25hk[?25l:jlk[?12l[?25hk[?25l:jlkk[?12l[?25hl[?25l:jlkkl[?12l[?25hd[?25l:jlkkld[?12l[?25hs[?25l:jlkklds[?12l[?25ha[?25l:jlkkldsa[?12l[?25hj[?25l:jlkkldsaj[?12l[?25hf[?25l:jlkkldsajf[?12l[?25hk[?25l:jlkkldsajfk[?12l[?25he[?25l:jlkkldsajfke[?12l[?25hk[?25l:jlkkldsajfkek[?12l[?25hl[?25l:jlkkldsajfkekl[?12l[?25hj[?25l:jlkkldsajfkeklj[?12l[?25hl[?25l:jlkkldsajfkekljl[?12l[?25hk[?25l:jlkkldsajfkekljlk[?12l[?25ha[?25l:jlkkldsajfkekljlka[?12l[?25hj[?25l:jlkkldsajfkekljlkaj[?12l[?25hf[?25l:jlkkldsajfkekljlkajf[?12l[?25he[?25l:jlkkldsajfkekljlkajfe[?12l[?25h[?25l[24;1H[K[24;53H          [6;5H[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;1H输入  :quit<Enter>  退出 Vim[24;63H[K[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;53H^Z        [6;5H[24;1H
+[?1l>[?12l[?25h[?1049l[?1000l[?1000h[?1049h[?1h=[?12;25h[?12l[?25h[27m[m[H[2J[?25l[1;1H[33m  1 [m[36m# /etc/security/limits.conf[m
+[33m  2 [m[36m#[m
+[33m  3 [m[36m#Each line describes a limit for a user in the form:[m
+[33m  4 [m[36m#[m
+[33m  5 [m[36m#gj1k<domain>        <type>  <item>  <value>[m
+[33m  6 [m[36m#[m
+[33m  7 [m[36m#Where:[m
+[33m  8 [m[36m#<domain> can be:[m
+[33m  9 [m[36m#        - an user name[m
+[33m 10 [m[36m#        - a group name, with @group syntax[m
+[33m 11 [m[36m#        - the wildcard *, for default entry[m
+[33m 12 [m[36m#        - the wildcard %, can be also used with %group syntax,[m
+[33m 13 [m[36m#                 for maxlogin limit[m
+[33m 14 [m[36m#[m
+[33m 15 [m[36m#<type> can have the two values:[m
+[33m 16 [m[36m#        - "soft" for enforcing the soft limits[m
+[33m 17 [m[36m#        - "hard" for enforcing hard limits[m
+[33m 18 [m[36m#[m
+[33m 19 [m[36m#<item> can be one of the following:[m
+[33m 20 [m[36m#        - core - limits the core file size (KB)[m
+[33m 21 [m[36m#        - data - max data size (KB)[m
+[33m 22 [m[36m#        - fsize - maximum filesize (KB)[m
+[33m 23 [m[36m#        - memlock - max locked-in-memory address space (KB)[m[24;63H6,1          顶端[6;5H[?12l[?25h[?25l[24;53H          [6;5H[?12l[?25h[24;1H[?1l>[?1049lVim: 拦截到致命信号(deadly signal) HUP
+Vim: 正在保留文件……
+Vim: 结束。
+[24;1H

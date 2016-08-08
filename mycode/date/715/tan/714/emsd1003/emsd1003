@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "start if.sh"
+ifconfig
+echo "end if.sh"
+exit 0
+

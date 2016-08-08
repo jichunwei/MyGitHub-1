@@ -1,0 +1,1 @@
+cmd_/home/tan/mycode/dev_driver/character/globalmem_block/globalmem.ko := ld -r -m elf_i386  --build-id -o /home/tan/mycode/dev_driver/character/globalmem_block/globalmem.ko /home/tan/mycode/dev_driver/character/globalmem_block/globalmem.o /home/tan/mycode/dev_driver/character/globalmem_block/globalmem.mod.o

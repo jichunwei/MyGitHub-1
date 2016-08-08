@@ -1,0 +1,11 @@
+    AREA    PIPELENE,CODE,READONLY
+    ENTRY
+    CODE32
+START
+    MOV R0,PC
+    MOV R1,PC
+    MOV R2,PC
+    MOV R3,PC
+    MOV R4,PC
+    MOV R5,PC
+    END

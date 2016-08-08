@@ -1,0 +1,5 @@
+ 实现globalmem.c 在内核中开辟一块区域，模拟字符设备，实现read,write,open,release,llseek功能（将内核中内存区域cdev封装到一个结构体中，解决read,write死循环问题)
+ struct global_dev{
+struct	cdev	cdev;
+char	mem[MAXSIZE];
+ };

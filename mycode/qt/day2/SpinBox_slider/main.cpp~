@@ -1,0 +1,38 @@
+#include <QtGui/QApplication>
+#include "widget.h"
+#include <QtGui/QSpinBox>
+#include <QtGui/QSlider>
+#include <QtGui/QHBoxLayout>
+
+
+int main(int argc, char *argv[])
+{
+    /*QObject-->QCoreApplication-->QApplication
+   QObject-->QWidge-->QFrame-->QLabel
+    QObject-->QBoxLayoutt-->QHBoxLayout*/
+    QApplication a(argc, argv);
+    Widget w;
+    QSpinBox   *spinBox = new QSpinBox();
+    spinBox->setMaximum(100);
+    spinBox->setMinimum(0);
+    QSlider *slider = new QSlider(Qt::Horizontal);
+    slider->setMaximum(100);
+    slider->setMinimum(0);
+    QObject::connect(spinBox,SIGNAL(valueChanged(int)),
+                     slider,
+                     SLOT(setValue(int)));
+    QObject::connect(slider,SIGNAL(valueChanged(int)),
+                     spinBox,
+                     SLOT(setValue(int)));
+    slider->setValue(50);
+    spinBox->setValue(20);
+    QHBoxLayout *hBoxLayout = new QHBoxLayout();
+    hBoxLayout->addWidget(spinBox);
+    hBoxLayout->addWidget(slider);
+    w.setLayout(hBoxLayout);
+
+
+    w.show();
+
+    return a.exec();
+}

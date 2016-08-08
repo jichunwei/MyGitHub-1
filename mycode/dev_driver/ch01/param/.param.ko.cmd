@@ -1,0 +1,1 @@
+cmd_/home/tan/dev_driver/ch01/param/param.ko := ld -r -m elf_i386  --build-id -o /home/tan/dev_driver/ch01/param/param.ko /home/tan/dev_driver/ch01/param/param.o /home/tan/dev_driver/ch01/param/param.mod.o

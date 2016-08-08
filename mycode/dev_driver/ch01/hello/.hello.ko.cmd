@@ -1,0 +1,1 @@
+cmd_/home/tan/dev_driver/ch01/hello/hello.ko := ld -r -m elf_i386  --build-id -o /home/tan/dev_driver/ch01/hello/hello.ko /home/tan/dev_driver/ch01/hello/hello.o /home/tan/dev_driver/ch01/hello/hello.mod.o
