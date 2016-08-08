@@ -1,0 +1,344 @@
+
+
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>杰普课程调查系统</title>
+    
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    
+    <!--
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    -->
+  	<style>
+<!--
+p.MsoBodyTextIndent
+	{margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:21.0pt;
+	line-height:150%;
+	font-size:10.5pt;
+	font-family:宋体;
+	margin-left:0cm; margin-right:0cm; margin-top:0cm}
+-->
+</style>
+  </head>
+  
+  <body>
+  <form name="pollForm" method="post" action="/poll/poll.do;jsessionid=F22D78511DA73F57D7AB6BBBB7C27C93">
+  <table border="0" width="768" align="center" id="table2">
+	<tr>
+		<td width="10%"><b><span style="font-size: 10.5pt; font-family: 华文中宋">
+		课程名称<span lang="EN-US">:</span></span></b></td>
+		<td width="88%"><b>
+		<span lang="EN-US" style="font-size: 12.0pt; font-family: Times New Roman">
+		EM-SD1103</span><span style="font-size: 10.5pt; font-family: 华文中宋">软件工程师脱产班（<span lang="EN-US">shell程序设计</span>）</span></b></td>
+	</tr>
+	<tr>
+		<td width="10%"><b><span style="font-size: 10.5pt; font-family: 华文中宋">
+		教师姓名<span lang="EN-US">:</span></span></b></td>
+		<td width="88%"><b><span style="font-size: 10.5pt; font-family: 华文中宋">
+		丁长明老师（<span lang="EN-US">2011年07月15日</span>）</span></b></td>
+	</tr>	
+	<tr>
+		<td colspan="2">
+		<p class="MsoBodyTextIndent">它将帮助我们及时了解您的学习情况，更好地为您提供高质量的培训服务，感谢您的大力支持。</td>
+	</tr>
+	</table>
+
+    <div align="center">
+
+    <table border="1" width="768" id="table1" bordercolor="#FFFFFF" bordercolordark="#000000" bordercolorlight="#000000" cellspacing="0" cellpadding="4" bgcolor="#000000" style="border-collapse: collapse">
+		<tr>
+			<td bgcolor="#FFFFFF" bordercolor="#000000" height="31">
+			<p align="center">
+			<span style="font-size: 10.5pt; font-family: 宋体; font-weight:700">评 
+			估 内 容</span></td>
+			<td align="center" bgcolor="#FFFFFF" bordercolor="#000000" height="31" width="60">
+			<span style="font-size: 10.5pt; font-family: 宋体; font-weight:700">非常满意</span></td>
+			<td align="center" bgcolor="#FFFFFF" bordercolor="#000000" height="31" width="60">
+			<span style="font-size: 10.5pt; font-family: 宋体; font-weight:700">比较满意</span></td>
+			<td align="center" bgcolor="#FFFFFF" bordercolor="#000000" height="31" width="60">
+			<span style="font-size: 10.5pt; font-family: 宋体; font-weight:700">基本满意</span></td>
+			<td align="center" bgcolor="#FFFFFF" bordercolor="#000000" height="31" width="54">
+			<span style="font-size: 10.5pt; font-family: 宋体; font-weight:700">还行</span></td>
+			<td align="center" bgcolor="#FFFFFF" bordercolor="#000000" height="31" width="54">
+			<span style="font-size: 9.0pt; font-family: 宋体; font-weight:700">一般</span></td>
+		</tr>
+		<tr>
+			<td colspan="6" bgcolor="#C0C0C0" height="30">
+			<p align="center"><b><i>
+			<span style="font-size: 10.5pt; font-family: 宋体">对教师的评价</span></i></b></td>
+		</tr>
+		<tr>
+			<td height="25" bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">1</span><span style="font-size: 10.5pt; font-family: 宋体">、教师对授课内容相关知识的理解程度</span></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c1" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c1" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c1" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c1" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c1" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">2</span><span style="font-size: 10.5pt; font-family: 宋体">、教师备课是否充分</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c2" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c2" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c2" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c2" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c2" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">3</span><span style="font-size: 10.5pt; font-family: 宋体">、教师的组织讨论及课堂控制能力</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c3" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c3" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c3" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c3" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c3" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">4</span><span style="font-size: 10.5pt; font-family: 宋体">、教师的讲解过程是否条理清晰、易于理解</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c4" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c4" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c4" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c4" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c4" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">5</span><span style="font-size: 10.5pt; font-family: 宋体">、教师对学员问题的解答是否清晰易懂</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c5" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c5" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c5" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c5" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c5" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">6</span><span style="font-size: 10.5pt; font-family: 宋体">、教师是否能够保证授课时间</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c6" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c6" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c6" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c6" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c6" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">7</span><span style="font-size: 10.5pt; font-family: 宋体">、教师的实践经验对学习本课程有无帮助</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c7" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c7" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c7" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c7" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c7" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#C0C0C0" colspan="6">
+			<p align="center"><b><i>
+			<span style="font-size: 10.5pt; font-family: 宋体">对教学材料的设计的评价</span></i></b></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">8</span><span style="font-size: 10.5pt; font-family: 宋体">、教学材料的组织是否条理清晰易懂</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c8" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c8" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c8" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c8" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c8" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">9</span><span style="font-size: 10.5pt; font-family: 宋体">、技术概念的难易程度对您是否适合</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c9" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c9" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c9" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c9" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c9" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF" height="29">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">10</span><span style="font-size: 10.5pt; font-family: 宋体">、您认为授课时间能否满足教学内容的要求</span></td>
+			<td bgcolor="#FFFFFF" height="29" align="center" width="60">
+			<input type="radio" name="c10" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c10" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c10" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c10" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c10" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">11</span><span style="font-size: 10.5pt; font-family: 宋体">、实验或练习的设计是否有助于您对课程内容的理解</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c11" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c11" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c11" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c11" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c11" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">12</span><span style="font-size: 10.5pt; font-family: 宋体">、您认为实验<span lang="EN-US">/</span>练习的时间够不够</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c12" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c12" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c12" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c12" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c12" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">13</span><span style="font-size: 10.5pt; font-family: 宋体">、教学材料是否能为您今后的工作提供帮助</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c13" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c13" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c13" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c13" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c13" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#C0C0C0" colspan="6">
+			<p align="center"><b><i>
+			<span style="font-size: 10.5pt; font-family: 宋体">其它有关教学的方面</span></i></b></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+			<span lang="EN-US" style="font-size: 10.5pt; font-family: 宋体">14</span><span style="font-size: 10.5pt; font-family: 宋体">、您认为本次课程内容的难易程度如何</span></td>
+			<td bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c14" value="5"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c14" value="4"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="60">
+			<input type="radio" name="c14" value="3"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c14" value="2"></td>
+			<td height="25" bgcolor="#FFFFFF" align="center" width="54">
+			<input type="radio" name="c14" value="1"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF" colspan="6">
+			<p class="MsoNormal" style="line-height:150%">
+			<span style="font-size: 10.5pt; font-family: 宋体">15. 您在哪方面没有听清楚？请写下来以便我们能够帮助您更好地学习(最少要填一条)！
+			 
+			</span>
+			<table border="0" width="100%" id="table3" cellspacing="0" cellpadding="0">
+				<tr>
+					<td width="25" align="left" valign="top">
+					<span style="font-size: 10.5pt; font-family: 宋体">1.</span> </td>
+					<td>
+					<textarea name="q11" cols="100%" rows="2"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td width="25" align="left" valign="top">
+					<span style="font-family: 宋体; font-size: 10.5pt">2</span><span style="font-size: 10.5pt; font-family: 宋体">.</span> </td>
+					<td><textarea name="q12" cols="100%" rows="2"></textarea></td>
+				</tr>
+				<tr>
+					<td width="25" align="left" valign="top">
+					<span style="font-size: 10.5pt; font-family: 宋体">3.</span> </td>
+					<td><textarea name="q13" cols="100%" rows="2"></textarea></td>
+				</tr>				
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="#FFFFFF" colspan="6">
+			<span style="font-family: 宋体; font-size:10.5pt; font-weight:700">
+			老师的课程都听明白了吗？能接受老师的授课方式吗？觉得自己有没有进步(可不填)？</span>
+			<table border="0" width="100%" id="table4" cellspacing="0" cellpadding="0">
+				<tr>
+					<td width="25" align="left" valign="top">
+					<span style="font-size: 10.5pt; font-family: 宋体">1.</span> </td>
+					<td>
+					<textarea name="q21" cols="100%" rows="2"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td width="25" align="left" valign="top">
+					<span style="font-family: 宋体; font-size: 10.5pt">2</span><span style="font-size: 10.5pt; font-family: 宋体">.</span> </td>
+					<td><textarea name="q22" cols="100%" rows="2"></textarea></td>
+				</tr>
+				<tr>
+					<td width="25" align="left" valign="top">
+					<span style="font-size: 10.5pt; font-family: 宋体">3.</span> </td>
+					<td><textarea name="q23" cols="100%" rows="2"></textarea></td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	<br>
+  <p align="center"><input type="submit" name="b1" value="提交"/>&nbsp;<input type="reset" name="b2" value="重置"/></p>
+	</form>
+  </body>
+</html></div>

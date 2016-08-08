@@ -1,0 +1,64 @@
+
+
+
+char readbuffer[1024] = {'\0'};
+char respbuffer[1024]=
+"HTTP/1.0 200 OK\r\nconnetction:close\r\nServer:Net-camera-1-0\r\nCache=Control:no-store,no-cache,muset-revalidate,pre-check = 0;,poset-check=0,max-age=0\r\nPragma:no-cache\r\nContent-type:
+multipart/x-mixedf-replace;boundarpy = www.briup.com\r\n\r\n'
+
+read(s_socket,readbuffer,sizeof());
+
+write(s_socket,respbuffer,...);
+print_picture(s_socket...);
+    }else{
+        while(1)
+        {
+            sprintf(write_buffer,"---www.briup.com\nContent-type:image/jpeg\nContent-Length:%d\n\n",devconfp->frame_size+DHT_SIZE);
+            write(client_socket,write_buff,...);
+            print_picture(s_socket...);
+        }
+    }
+else
+{
+    while(1)
+    {
+        sprintf(write_buffer,"---www.briup.com\nContent-type:image/jpeg\nContent-Length:%d\n\n",devconfp->frame_size+DHT_SIZE);
+
+        write(client_socket,write_buff,...);
+        print_picture(s_socket...);
+    }
+}
+
+
+
+
+unsigned char *g_buf;
+
+void init()
+{
+
+}
+
+get_fram()
+{
+    ioctl(..VIDIOC_DQBUF,...);
+    memcpy(g_buf,...,buffers[buf.index].start);
+    
+    ioctl(..VIDIOC_DQBUF...);
+}
+
+void *tn_fn()
+{
+    while(!stop)
+    {
+        //
+        get_frame();
+    }
+}
+
+int main()
+{
+    open();
+    init();
+    pthread_creat(...th_fn,...);
+}

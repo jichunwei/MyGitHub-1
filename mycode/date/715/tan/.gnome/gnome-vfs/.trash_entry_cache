@@ -1,0 +1,4 @@
+/dev/shm -
+/lib/init/rw -
+/dev -
+/boot -

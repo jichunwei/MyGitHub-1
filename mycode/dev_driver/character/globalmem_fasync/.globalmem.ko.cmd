@@ -1,0 +1,1 @@
+cmd_/home/tan/mycode/dev_driver/character/globalmem_fasync/globalmem.ko := ld -r -m elf_i386  --build-id -o /home/tan/mycode/dev_driver/character/globalmem_fasync/globalmem.ko /home/tan/mycode/dev_driver/character/globalmem_fasync/globalmem.o /home/tan/mycode/dev_driver/character/globalmem_fasync/globalmem.mod.o

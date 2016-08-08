@@ -1,0 +1,1 @@
+cmd_/home/tan/dev_driver/character/container_of/container_of.ko := ld -r -m elf_i386  --build-id -o /home/tan/dev_driver/character/container_of/container_of.ko /home/tan/dev_driver/character/container_of/container_of.o /home/tan/dev_driver/character/container_of/container_of.mod.o
