@@ -1,0 +1,23 @@
+# Default configuration of all  customer profile
+[singtel]
+countrycode       = SG
+
+# Use dictionary to compare above configuration because it relate to command in AP
+fw_settings = {'control': 'vf2825_420_cntrl.rcks', 'proto': 'FTP', 'host': 'ftp.ruckus-singtel.com', 'user': 'singtel', 'password': 'singtel'}
+
+ssid_suppress = {'wlan0':'Enabled', 'wlan1': 'Disabled'}
+wlan1_state = {'wlanID':'wlan1', 'state':'down'}
+
+[telia_sonera]
+rpm_default_ipaddr = {'key':'networks/network0/default-ipaddress', 'value':'192.168.1.40'}
+max_wlans = 2
+wlan1 = {'name':'home', 'state':'down', 'type':'AP'}
+if_list = {'if0':'eth0', 'if1':'wlan0','if2':'wlan1'}
+if0_qos_cfg = {'tos_classification': 'Disabled'}
+if1_qos_cfg = {'tos_classification': 'Disabled'}
+if2_qos_cfg = {'tos_classification': 'Disabled','classification': 'Enabled', 'directed_multicast': 'Enabled','directed_broadcast': 'Enabled', 'unknown_multicast_drop': 'Enabled', 'well_known_multicast_forward': 'Enabled'}
+countrycode = SE
+
+wlan1_encryption = {'key_string': 'apsectelia', 'encryption': 'TKIP', 'ssid': 'Home', 'auth': 'PSK', 'wpa_ver': 'WPA'}
+fw_settings = {'auto_upgrade': 'enabled', 'control': 'fwcntrl_vf2825.rcks', 'proto': 'ftp', 'host': 'ftp-stanis.telia.com', 'user': 'ruckus', 'password': 'stanisskohag'}
+

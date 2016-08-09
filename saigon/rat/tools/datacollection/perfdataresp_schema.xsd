@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.ruckuswireless.com/AP/PerfDataResp"
+	targetNamespace="http://www.ruckuswireless.com/AP/PerfDataResp"
+	elementFormDefault="unqualified"
+	attributeFormDefault="unqualified">
+
+	<xs:element name="DeviceInfo">
+		<xs:complexType>
+			<xs:attribute name="X_001392_STATS_INTERVAL"
+							type="xs:unsignedShort" />
+			<xs:attribute name="ModelName" 	type="xs:string" />
+			<xs:attribute name="SerialNumber" type="xs:string" />
+			<xs:attribute name="SoftwareVersion" type="xs:string" />
+			<xs:attribute name="UpTime" 	type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STATS_INTERVAL_BINS">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedShort">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="96" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="Time">
+		<xs:complexType>
+			<xs:attribute name="CurrentLocalTime" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="IPInterface">
+		<xs:complexType>
+			<xs:attribute name="X_001392_IP_INTERFACE_Index" type="xs:unsignedShort" />
+			<xs:attribute name="X_001392_MGT_MAC" type="xs:string" />
+			<xs:attribute name="IPInterfaceIPAddress" type="xs:string" />
+			<xs:attribute name="Enable">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedShort">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="LANHostConfigManagement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="IPInterface" minOccurs="0"
+					maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="IPInterfaceNumberOfEntries">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedShort">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="X_001392_ClientStats">
+		<xs:complexType>
+			<xs:attribute name="X_001392_STA_STATS_Index"
+				type="xs:unsignedShort" />
+			<xs:attribute name="X_001392_STA_TX_RSSI"
+				type="xs:unsignedShort" />
+			<xs:attribute name="X_001392_STA_THROUGHPUT_EST"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STA_RX_PKTS"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STA_TX_PKTS_XMIT"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STA_TX_PKTS_QUEUED"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STA_TX_PKTS_DROP_OVERFLOW"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STA_TX_PKTS_DROP_XRETRIES"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_STA_TX_PKTS_DROP_OVERDUE"
+				type="xs:unsignedInt" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="AssociatedDevice">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="X_001392_ClientStats" minOccurs="0"
+					maxOccurs="96" />
+			</xs:sequence>
+			<xs:attribute name="X_001392_STA_Index"
+					type="xs:unsignedShort" />
+			<xs:attribute name="AssociatedDeviceMACAddress"
+					type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="X_001392_WLANStats">
+		<xs:complexType>
+			<xs:attribute name="X_001392_WLAN_STATS_Index"
+				type="xs:unsignedShort" />
+			<xs:attribute name="X_001392_WLAN_NF"
+				type="xs:long" />
+			<xs:attribute name="X_001392_WLAN_RX_PKTS"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_WLAN_RX_OCTETS"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_WLAN_TX_PKTS"
+				type="xs:unsignedInt" />
+			<xs:attribute name="X_001392_WLAN_TX_OCTETS"
+				type="xs:unsignedInt" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="WLANConfiguration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="X_001392_WLANStats" minOccurs="0"
+					maxOccurs="96" />
+				<xs:element ref="AssociatedDevice" minOccurs="0"
+					maxOccurs="100" />
+			</xs:sequence>
+			<xs:attribute name="X_001392_WLAN_Index"
+					type="xs:unsignedShort" />
+			<xs:attribute name="X_001392_WLAN_NAME"
+					type="xs:string" />
+			<xs:attribute name="Enable">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedShort">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Channel">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="255" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="SSID" type="xs:string" />
+			<xs:attribute name="BeaconType" type="xs:string" />
+			<xs:attribute name="Standard" type="xs:string" />
+			<xs:attribute name="WPAEncryptionModes"
+					type="xs:string" />
+			<xs:attribute name="TotalAssociations">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedInt">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="100" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="LANDevice">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="LANHostConfigManagement" minOccurs="0"/>
+				<xs:element ref="WLANConfiguration" minOccurs="0"
+					maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="X_001392_LAN_Index" type="xs:unsignedShort" />
+			<xs:attribute name="LANWLANConfigurationNumberOfEntries">
+				<xs:simpleType>
+					<xs:restriction base="xs:unsignedShort">
+						<xs:minInclusive value="0" />
+						<xs:maxInclusive value="1" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="InternetGatewayDevice">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DeviceInfo" minOccurs="0"/>
+				<xs:element ref="Time" minOccurs="0"/>
+				<xs:element ref="LANDevice" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ResponseStatus">
+		<xs:complexType>
+			<xs:attribute name="Code" type="xs:integer" />
+			<xs:attribute name="Msg" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ap-stat">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="InternetGatewayDevice" minOccurs="0"
+					maxOccurs="1" />
+				<xs:element ref="ResponseStatus" minOccurs="1"
+					maxOccurs="3" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

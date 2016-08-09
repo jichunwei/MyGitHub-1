@@ -1,0 +1,82 @@
+[INFO]
+
+# General Information
+const_auth_method_open = open
+const_auth_method_shared = shared
+const_auth_method_auto = Auto
+const_auth_method_psk = PSK
+
+const_encryption_method_none = none
+const_encryption_method_wpa = WPA
+const_encryption_method_wpa2 = WPA2
+const_encryption_method_wpa_auto = WPA-Auto
+const_encryption_method_wep64 = WEP-64
+const_encryption_method_wep128 = WEP-128
+
+const_algorithm_tkip = TKIP
+const_algorithm_aes = AES
+const_algorithm_auto = Auto
+
+const_wep_index1 = 1
+const_wep_index2 = 2
+const_wep_index3 = 3
+const_wep_index4 = 4
+
+const_countrycode = United States
+
+# Login
+loc_login_username_textbox = xpath=//input[contains(@id,'login-username')]
+loc_login_password_textbox = xpath=//input[contains(@id,'password')]
+loc_login_image = xpath=//input[contains(@type,'image')]
+
+# Logout
+loc_logout_image = xpath=//input[contains(@type,'image')]
+
+
+# Configuration -> Wireless
+loc_conf_wireless_anchor = xpath=//a[contains(@href,'configuration/wireless-adapter.asp')]
+
+loc_conf_wireless_countrycode_option = xpath=//select[@id='countrycode']
+loc_conf_wireless_ssid_textbox = xpath=//input[contains(@id,'sp-ssid')]
+loc_conf_wireless_encryption_option = xpath=//select[@id='sp-securitymode']
+loc_conf_wireless_wep_auth_open_button = xpath=//input[@id='sp-wepmode-open']
+loc_conf_wireless_wep_auth_shared_button = xpath=//input[@id='sp-wepmode-shared']
+loc_conf_wireless_wep_auth_auto_button = xpath=//input[@id='sp-wepmode-auto']
+loc_conf_wireless_wep_encryption_option = xpath=//select[@id='sp-wepkeylen']
+loc_conf_wireless_wep_key_entry_hex_button = xpath=//input[@id='sp-keymethod-hex']
+loc_conf_wireless_wep_key_entry_ascii_button = xpath=//input[@id='sp-keymethod-ascii']
+loc_conf_wireless_wep_key_textbox = xpath=//input[@id='sp-wepkey']
+loc_conf_wireless_wep_key_index_option = xpath=//select[@id='sp-defkeyidx']
+loc_conf_wireless_wpa_version_button = xpath=//input[@id='sp-wpa-version-wpa']
+loc_conf_wireless_wpa2_version_button = xpath=//input[@id='sp-wpa-version-wpa2']
+loc_conf_wireless_wpaauto_version_button = xpath=//input[@id='sp-wpa-version-auto']
+loc_conf_wireless_wpa_tkip_button = xpath=//input[@id='sp-wpamode-tkip']
+loc_conf_wireless_wpa_aes_button = xpath=//input[@id='sp-wpamode-aes']
+loc_conf_wireless_wpa_auto_button = xpath=//input[@id='sp-wpamode-auto']
+loc_conf_wireless_wpa_passphrase_textbox = xpath=//input[@id='sp-wpapassphrase']
+
+loc_conf_wireless_anchor_vf7111 = xpath=//a[@href='$_$/cWireless.asp?subp=common']
+loc_conf_wireless_video_anchor_vf7111 = xpath=//a[@href='$_$/cWireless.asp?subp=wlan0']
+loc_conf_wireless_ssid_textbox_vf7111 = xpath=//input[@id='ssid']
+loc_conf_wireless_encryption_option_vf7111 = xpath=//select[@id='securitymode']
+loc_conf_wireless_wpa_version_button_vf7111 = xpath=//input[@id='wpa-version-wpa']
+loc_conf_wireless_wpa2_version_button_vf7111 = xpath=//input[@id='wpa-version-wpa2']
+loc_conf_wireless_wpaauto_version_button_vf7111 = xpath=//input[@id='wpa-version-auto']
+loc_conf_wireless_wpa_aes_button_vf7111 = xpath=//input[@id='wpa-alg-aes']
+loc_conf_wireless_wpa_passphrase_textbox_vf7111 = xpath=//input[@id='wpapassphrase']
+
+loc_conf_wireless_update_button = xpath=//input[contains(@id,'submit-button')]
+
+# Configure -> Device
+loc_conf_device_anchor = xpath=//a[contains(@href, 'configuration/device.asp')]
+loc_conf_device_name_textbox = xpath=//input[@id='devicename']
+loc_conf_device_home_protection_enable_button = xpath=//div[@id='content']//input[@value='1']
+loc_conf_device_home_protection_disable_button = xpath=//div[@id='content']//input[@value='0']
+loc_conf_device_home_username_textbox = xpath=//input[@id='home-username']
+loc_conf_device_home_password_textbox = xpath=//input[@id='password']
+loc_conf_device_home_password_confirm_textbox = xpath=//input[@id='confirm']
+
+# Status -> Device
+loc_status_device_anchor = xpath=//a[contains(@href, 'status/device.asp')]
+loc_status_device_cell = xpath=//div[@id='content']//tr[$_$]
+

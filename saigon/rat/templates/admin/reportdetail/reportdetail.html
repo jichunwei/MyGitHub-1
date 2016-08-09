@@ -1,0 +1,652 @@
+{% extends "admin/base_site.html" %}
+{% load dajaxice_templatetags %}
+{% block extrastyle %}
+{% dajaxice_js_import %}
+<script type="text/javascript">
+
+function getOs()  
+{   
+   if(navigator.userAgent.indexOf("MSIE")>0) {   
+        if (navigator.userAgent.indexOf("MSIE 6.0")>0)
+           {return 'IE6'}
+        else if (navigator.userAgent.indexOf("MSIE 8.0")>0)
+           {return 'IE8'}
+        else if (navigator.userAgent.indexOf("MSIE 10.0")>0)
+           {return 'IE10'}
+        else {return "other_IE";}
+   } 
+   else if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){  
+        return "Firefox";  
+   } 
+   else {return "other";} 
+}  
+var browser_version = getOs();
+//alert(browser_version)
+var fail_tc_num = 0;
+var bottom_time = 0;
+var last_scroll_location = 1
+//By chentao 2013-11, to go to target position
+function go_to_target_fail_tc(loc)
+{
+window.scrollTo(0,loc);
+//last_scroll_location = get_scroll();
+}
+//By chentao 2013-11, to get current scroll position
+function get_scroll(){return document.documentElement.scrollTop;}
+
+
+//By chentao 2013-11, to get each failed case's position
+function getAbsolutePosition(temp){
+e=document.getElementById(temp);
+var t=e.offsetTop;
+var l=e.offsetLeft;
+while(e=e.offsetParent){t+=e.offsetTop;}
+return t;
+}
+
+//By chentao 2013-11, navigate to previous failed case
+function goto_previous_fail()
+{
+if (fail_tc_num == 0){ return;}
+var target_fail_location = 0;
+current_scroll=get_scroll();
+for (var i=fail_tc_num; i>0; i--) 
+  {
+    current_fail=getAbsolutePosition(i);
+    if (current_scroll>current_fail)
+       {
+        target_fail_location=current_fail;
+        break;
+        }
+  }
+if (target_fail_location == 0){target_fail_location =getAbsolutePosition(fail_tc_num);}
+go_to_target_fail_tc(target_fail_location);
+}
+
+//By chentao 2013-11, navigate to next failed case
+
+function goto_next_fail()
+{
+if (fail_tc_num == 0) return;
+var target_fail_location = 0;
+current_scroll=get_scroll();
+
+for (var i=1; i<=fail_tc_num; i++) 
+  {
+    current_fail=getAbsolutePosition(i);
+    if (current_scroll<current_fail)
+       {
+        target_fail_location=current_fail;
+        break;
+       }
+  }
+
+var a = document.documentElement.scrollTop==0? document.body.clientHeight : document.documentElement.clientHeight;
+var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;
+var c = document.documentElement.scrollTop==0? document.body.scrollHeight : document.documentElement.scrollHeight;
+
+if (target_fail_location == 0){target_fail_location =getAbsolutePosition(1);}
+
+//By chentao 2013-11, reaches the bottom, Firefox
+if (target_fail_location>=window.scrollMaxY)
+  {
+    bottom_time=bottom_time+1;
+    if (bottom_time%2==0){target_fail_location = getAbsolutePosition(1);}
+  }
+//By chentao 2013-11, reaches the bottom, IE6,IE8,IE10
+if (a+b==c && browser_version=="IE6")
+{target_fail_location =getAbsolutePosition(1);}
+if (a+b==c && browser_version=="IE8")
+{target_fail_location =getAbsolutePosition(1);}
+if (a+b==c && browser_version=="IE10")
+{target_fail_location =getAbsolutePosition(1);}
+go_to_target_fail_tc(target_fail_location);
+}
+
+function show_cwd(data){
+window.blur();
+LogWindow=window.open('','','alwaysRaised=yes,scrollbars=yes,z-look=yes,location=no,status=no,width=800,top=150,left=150')
+LogWindow.document.write(data.log_content)
+LogWindow.document.title = data.tb+'|'+data.bld+'|'+data.file_name;
+LogWindow.focus()
+}
+</script>
+
+<script type="text/javascript" charset="utf-8">
+	$=function(id){return document.getElementById(id);}
+	setv = function(v){$('show').innerHTML = v;}
+	function callback_status(data){
+	    if(data!=Dajaxice.EXCEPTION){
+	        setv(data.message);
+	    }
+	    else{
+	        setv('Error');
+	    }
+	}	
+	function callback_upadte_ts(data){
+		if(data!=Dajaxice.EXCEPTION){	
+			len = data.tcid_list.length						
+			for(var i=0;i<len;i++){
+				var tcid = data.tcid_list[i]
+				$("tcid_"+tcid).checked=data.chk								
+			}
+			setv(data.message + " idlist: " + data.tcid_list);
+		}
+		else{
+			setv('Error');
+		}
+	}
+  //chentao 2013-10-13 add this function to support "enable and disable debug options".
+	function callback_upadte_ts_debug(data){
+		if(data!=Dajaxice.EXCEPTION){	
+			len = data.tcid_list.length						
+			for(var i=0;i<len;i++){
+				var tcid = data.tcid_list[i]
+				$("debug_tcid_"+tcid).checked=data.chk								
+			}
+			setv(data.message + " idlist: " + data.tcid_list);
+		}
+		else{
+			setv('Error');
+		}
+	}		
+ /*
+ 	function types:
+ 	 	expand, expandAll
+ 	 	collapse, collapseAll
+ 	What to DO:
+ 	 	expand or collapse the test suites when customer require.
+
+ 	Author: cwang@ruckuswireless.com
+ 	Date:	2011/7/21 24:21
+ */ 
+  //support IE version
+  if(!document.getElementsByClassName){
+	    document.getElementsByClassName = function(cn){
+	        var rx = new RegExp("\\b" + cn + "\\b");
+	        var allT = document.getElementsByTagName("*");
+	        var allCN = [];
+	        var i = 0;
+	        var a=null;
+	        while (a = allT[i++]){
+	            if (a.className && a.className.indexOf(cn)+1){
+	                if(a.className===cn){allCN[allCN.length] = a;continue;}
+	                rx.test(a.className)?(allCN[allCN.length] = a):0;
+	            }
+	        }
+	        return allCN;
+	    }
+  }
+  //support IE version
+  function nextElement(obj){	  
+	  tgt = obj.nextSibling;	  
+	  while(tgt!=null){
+		  if(tgt.nodeType==1){
+			  return tgt;
+		  }
+		  tgt = tgt.nextSibling;
+	  }
+  }
+ 
+  function expandAll(evt){	  	 
+	  tss = document.getElementsByClassName('expand');
+	  len = tss.length;
+	  for(var i=0; i<len; i++){
+		  expand(tss[i]);
+	  }	  
+	  evt.style.display="none";
+	  evt.parentNode.children[0].style.display="";
+  }
+
+  function expand(evt){	  
+	  obj = evt.parentNode.parentNode.parentNode;
+	  tcs = obj.nextElementSibling || nextElement(obj);//support IE & Firefox & Chrome
+	  tcs.style.display="";
+	  evt.style.display="none";	  
+	  //console.log(evt.parentNode.children[1]);
+	  evt.parentNode.children[0].style.display="";	 
+  }
+
+  function collapseAll(evt){	  
+	  tss = document.getElementsByClassName('collapse');	    
+	  len = tss.length;	  
+	  for(var i=0; i<len; i++){
+		  collapse(tss[i]);
+	  }	  
+	  evt.style.display="none";
+	  evt.parentNode.children[1].style.display="";	  
+  }
+  
+  function collapse(evt){	  	  
+	  obj = evt.parentNode.parentNode.parentNode;
+	  tcs = obj.nextElementSibling || nextElement(obj);//support IE & Firefox & Chrome	    	  
+	  tcs.style.display="none";	
+	  evt.style.display="none";  
+	  evt.parentNode.children[1].style.display="";
+  }
+
+ /*
+	What to DO:
+	 	sort run message for detail info
+
+	Author: guo.can@odc-ruckuswireless.com
+	Date:	2013/06/08
+*/ 
+  //sort rule by date and time
+  function sortNumber(a,b)
+  {
+	  i=0
+	  //Get 130606-1803 change to 1306061803
+	  first = a.substring(i,i+12);
+	  second = b.substring(i,i+12);
+	  first = first.replace("-","");
+	  second = second.replace("-","");
+	  first = first.replace(":","");
+	  second = second.replace(":","");
+	  return parseInt(second) - parseInt(first);
+  }
+  
+  //sort message
+  //chentao 2013-10-13 add one parameter so it can show specified number of messages.
+  function sort_message(init_message,show_num,result_type)
+  {
+	  
+	  //{'130603-1848': [0, "show SR return: \n {'Smart Redundancy': {'Status': 'Disabled', 'Shared Secret': '', 'Peer IP/IPv6 Address': ''}}"], '130604-1302': [0, "show SR return: \n {'Smart Redundancy': {'Status': 'Disabled', 'Shared Secret': '', 'Peer IP/IPv6 Address': ''}}"], '130604-1328': [0, "show SR return: \n {'Smart Redundancy': {'Status': 'Disabled', 'Shared Secret': '', 'Peer IP/IPv6 Address': ''}}"]}
+	  sortm = init_message.replace("{","");
+	  sortm = sortm.replace("}","");
+	  while(sortm.match("], &#39;")!=null){
+	      sortm = sortm.replace("], &#39;","]%");
+	  }
+	  //Get array of message
+	  sortm = sortm.split("%");
+	  for(i=0;i<sortm.length;i++)
+	  {
+		  //Replace ' of '130603-1848'
+		  sortm[i] = sortm[i].replace("&#39;","");
+		  sortm[i] = sortm[i].replace("&#39;","");
+	  }
+	  sortm.sort(sortNumber);
+	  if (show_num=="1")
+	  {
+	  show_num_tmp=1;
+	  }
+	  else if (show_num=="new")
+	  {
+		  show_num_tmp=1;
+		  }
+	  else if (show_num=="2")
+	  {
+		  show_num_tmp=2;
+	  }
+	  else
+	  {
+		  show_num_tmp=sortm.length
+	  }
+          if (sortm.length<=show_num_tmp)
+          {
+        	  show_num_tmp=sortm.length;
+          }   
+	  outputm = "";
+	  //Add <br> for each result
+	  for(i=0;i<show_num_tmp;i++)
+	  {
+		  outputm = outputm + sortm[i] + "<br>";
+	  }
+	  
+	  if (show_num=="new")
+	  {
+		  if (result_type!="RUN")
+		  {
+			  return "";
+		  }
+	  }
+      return outputm;
+  }
+  //chentao 2013-10-13 add this function to refresh webpage.  
+   function myrefresh()
+  { 
+   history.go(0)   
+  }
+   function setCookie(name, value) {
+       var exp = new Date();
+       exp.setTime(exp.getTime() + 24 * 60 * 60 * 1000);
+       document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    }
+   function getCookie(name){
+       var regExp = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+       var arr = document.cookie.match(regExp);
+       if (arr == null) {
+            return null;
+          }
+        return unescape(arr[2]);
+    } 
+   function result_view(result,show_num,result_type)
+   {
+	   if (show_num=="new")
+	   {
+		   if (result_type!="RUN")
+		   {
+			   return "";
+			} 
+		}
+	   return result;
+   }
+</script>
+<style type="text/css">
+
+table.tss {
+    border-collapse:separate;
+    border-spacing:4px;
+}
+tr.tss_header th {
+    text-align:center; vertical-align:bottom; border-color:gray; border-style:none; border-bottom-style:double; spacing:2px;
+    }
+tr.tss td {
+    text-align:center; vertical-align:top;
+}
+
+* html{background-image:url(about:blank);background-attachment:fixed;}
+div  .fixed {position: fixed; top:100;left: 0px; color: #cccccc; width: 20px; height: 160px; background-color: transparent;}
+div  .IE6fixed {position:absolute;left:expression(eval(document.documentElement.scrollLeft-15));top:expression(eval(document.documentElement.scrollTop+90));background-color: transparent;}
+
+</style>
+{% endblock %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="../">Home</a> &rsaquo; <a href="../report/">Report</a> &rsaquo; Report Detail</div>{% endblock %}
+{% block coltype %}flex{% endblock %}
+{% block content %}
+
+<div id="divFixedPosition">
+<input type="button" id="go_to_previous_fail" style="vertical-align:middle; text-align:center;width: 16px; height: 50px;" value=&#8593 onclick="goto_previous_fail()"></input>
+<br>
+<input type="button" id="go_to_next_fail" style="vertical-align:middle; text-align:center;width: 16px; height: 50px;" value=&#8595 onclick="goto_next_fail()"></input>
+<br>
+<input type="button" id="go_to_page_top" style="vertical-align:middle; text-align:center;width: 16px; height: 50px;" value=&#916 onclick="go_to_target_fail_tc(0)"></input>
+</div>
+<script>
+if (browser_version=="IE6")
+{
+document.getElementById("divFixedPosition").className="IE6fixed"
+}
+else if (browser_version=="Firefox" ||browser_version=="IE8"||browser_version=="IE10")
+{
+document.getElementById("divFixedPosition").className="fixed"
+}
+else {document.getElementById("divFixedPosition").style.display= "none"}
+</script>
+<div class="module" id="content-main">		
+<table class="tss" cellspacing="0" style="border-style:ridge #888888;">
+
+<tbody>
+    <tr><th colspan="16"><h1> RuckusAutoTest testbed '<font color='blue'>{{ViewOption.tbname}}</font>' TEST RESULT</h1></th></tr>
+    <tr class="row1"><td></td><th>Build Stream</th><td>{{batch.build.build_stream.name}}</td><td colspan="12"></td></tr>
+    <tr class="row2"><td></td><th>Build Number</th><td>{{batch.build.version}}</td><td colspan="12"></td></tr>
+    <tr class="row1"><td></td><th>Start Time</th><td>{{batch.start_time}}</td><td colspan="12"></td></tr>
+    <tr class="row2"><td></td><th>End Time</th><td>{{batch.end_time}}</td><td colspan="12"></td></tr>
+    <tr class="row1"><td></td><th>Duration</th><td>{{duration}}</td><td colspan="12"></td></tr>
+    <tr class="row2"><th colspan="3" style="height:32px;"></th></tr>
+    <tr class="row1">
+        <th colspan="3">
+    {% ifequal ViewOption.detail "False" %}
+            <a href="?detail=True&tbname={{ViewOption.tbname}}"><b>View Test Suite Result Detail</b></a>
+    {% else %}
+            <a href="?detail=False&tbname={{ViewOption.tbname}}"><b>Hide Test Suite Result Detail</b></a>
+    {% endifequal %}
+        </th>
+        <td colspan="13" align="right">
+            <a href="/xls/reportdetail/{{batch.id}}?detail=False&tbname={{ViewOption.tbname}}"><b>Download As Excel File</b></a>
+        </td>
+    </tr>
+    {# <tr><td colspan="16" style="height: 2px;"></td></tr> #}
+    <tr><th colspan="16"><h2 style="font-size:16px;">Test Suite Summary</h2></th></tr>
+    <tr class="tss_header">
+      <th style="width:20px;">No.</th>
+      <th style="width:60%;" colspan="2">Test Suites</th>
+      <th id="show_log" style="width:30px;"><span style="color:orange; font-size:10px;">log</span></th>
+      <script>
+      if (browser_version!="Firefox")
+      {document.getElementById("show_log").style.display= "none"}
+      </script>
+      <th style="width:14px;"><span style="color:orange; font-size:10px;">cb</span></th>
+      <th>Run Time</th>
+      <th>Pass</th>
+      <th>Fail</th>
+      <th>Error</th>
+      <th>N/A</th>
+      <th>Not Run</th>
+      <th>Pass %</th>
+      <th>Fail %</th>
+      <th>Error %</th>
+      <th>N/A %</th>
+      <th>Not Run %</th>
+      <th>Total</th>
+    </tr>
+    {% for ts in testsuites %}
+    <tr class="tss {% cycle 'row1' 'row2' %}">
+      {% for ts_summary in ts %}
+        {% ifequal forloop.counter 1 %}
+            <th>{{ts_summary.suite_no}}.</th>        
+            <th  colspan="2" style="color:blue;font-size:14px;font-weight:bold;"><a href="#go_to{{ts_summary.suitename}}" onclick='go_to_ts(this);return flse;'>{{ts_summary.suitename}}</a></th>
+            <th id="show_log_{{ts_summary.suitename}}"><input type="button" id="logfile_{{ts_summary.suitename}}" style="width: 35px;" value='open' onclick="Dajaxice.rat.RuckusAutoTest.show_cwd(show_cwd,{'tb':'{{ViewOption.tbname}}','bld':'{{batch.build.version}}','ts':'{{ts_summary.suitename}}'});"></input></th>            
+            <script>
+            if (browser_version!="Firefox")
+            {document.getElementById("show_log_{{ts_summary.suitename}}").style.display= "none"}
+	    </script>
+            <td>{% if ts_summary.is_combo_test%}<span style="color:orange;width:14px">y</span>{% endif %}</td>
+            <td>{{ts_summary.this_runtime}}</td>
+            <td>{{ts_summary.PASS}}</td>
+            <td>{{ts_summary.FAIL}}</td>
+            <td>{{ts_summary.ERROR}}</td>
+            <td>{{ts_summary.NA}}</td>
+            <td>{{ts_summary.NOTRUN}}</td>
+            <td>{{ts_summary.Pass_Percent}}</td>
+            <td>{{ts_summary.Fail_Percent}}</td>
+            <td>{{ts_summary.Error_Percent}}</td>
+            <td>{{ts_summary.NA_Percent}}</td>
+            <td>{{ts_summary.NotRun_Percent}}</td>          
+            <td>{{ts_summary.Total}}</td>      
+        {% endifequal %}
+      {% endfor %}    	
+    </tr>
+    {% endfor %}
+    <tr class="tss" style="font-family: italic; color: #444444;">
+      <td>&nbsp;</td>
+      <td id="show_log_nbsp1">&nbsp;</td>
+      <script>
+      if (browser_version!="Firefox")
+      {document.getElementById("show_log_nbsp1").style.display= "none"}
+      </script>
+      <td colspan="3" style="text-align: right;">Total</td>
+      <td>{{total.this_runtime}}</td>
+      <td>{{total.PASS}}</td>
+      <td>{{total.FAIL}}</td>
+      <td>{{total.ERROR}}</td>
+      <td>{{total.NA}}</td>
+      <td>{{total.NOTRUN}}</td>
+      <td>{{total.Pass_Percent}}</td>
+      <td>{{total.Fail_Percent}}</td>
+      <td>{{total.Error_Percent}}</td>
+      <td>{{total.NA_Percent}}</td>
+      <td>{{total.NotRun_Percent}}</td> 
+      <td>{{total.Total}}</td>         
+    </tr>
+    {# batch result with combo test suite in mind. #}
+    {% if combo_total %}
+    <tr class="tss" style="font-family: bold; color: #3300FF">
+      <th>&nbsp;</th>
+      <th id="show_log_nbsp2">&nbsp;</th>
+      <script>
+      if (browser_version!="Firefox")
+      {document.getElementById("show_log_nbsp2").style.display= "none"}
+      </script> 
+      <th colspan="3" style="text-align: right;">Total <sup><span style="font-family: normal;">(collapse ComboTest to 1)</span></sup></th>
+      <td>{{total.this_runtime}}</td>
+      <td>{{combo_total.PASS}}</td>
+      <td>{{combo_total.FAIL}}</td>
+      <td>{{combo_total.ERROR}}</td>
+      <td>{{combo_total.NA}}</td>
+      <td>{{combo_total.NOTRUN}}</td>
+      <td>{{combo_total.Pass_Percent}}</td>
+      <td>{{combo_total.Fail_Percent}}</td>
+      <td>{{combo_total.Error_Percent}}</td>
+      <td>{{combo_total.NA_Percent}}</td>
+      <td>{{combo_total.NotRun_Percent}}</td> 
+      <td>{{combo_total.TotalRun}}</td>         
+    </tr>
+    {% endif %}
+</tbody>
+</table>
+</div>		
+<p class="paginator">&nbsp;</p></br></br>
+{% ifequal ViewOption.detail "True" %}
+  {%comment%}Result Detail Section{%endcomment%}
+  <div class="module" id="changelist">
+  <table cellspacing="0"  style="border-style:ridge #888888;">	
+  <thead>
+    <tr>
+      <th colspan="7"><h2 style="font-size:16px;font-weight:bold">Test Suite Result in Detail</h2></th>
+    </tr>
+    <tr>
+      <th><img src="/media/img/admin/icon-no.gif" width="10" height="10" class="collapse_all"
+        	onclick="collapseAll(this);" title="collapse all">
+        	<img src="/media/img/admin/icon_addlink.gif" width="10" height="10" class="expand_all"
+        	onclick="expandAll(this);" style="display: None;" title="expand all">
+       </th>
+      <th align="middle" style="padding-top:8px; padding-bottom:5px;">SkipRun</th>
+      <th align="middle" style="padding-top:8px; padding-bottom:5px;">Debug</th>
+      <th align="middle" style="padding-top:8px; padding-bottom:5px; width:20px;">No.</th>
+      <th align="middle" style="padding-top:8px; padding-bottom:5px;">Test Case ID</th>
+      <th align="middle" style="padding-top:8px; padding-bottom:5px;">Result</th>
+      <th>Message
+          <select id="select_show_message" name="show_message" style="" onchange="setCookie('select_show_message',this.selectedIndex)">
+                  <option value="1">Show recent 1 message</option>
+                  <option value="2">Show recent 2 messages</option>
+                  <option value="all">Show all messages</option>
+                  <option value="new">Show last run message</option>
+          </select>
+          <script type="text/javascript">
+          var selectedIndex = getCookie("select_show_message");
+          if(selectedIndex != null) {
+          document.getElementById("select_show_message").selectedIndex = selectedIndex;
+          }
+          </script>   
+          <input type="button" title="show_message_ok" id="show_message_ok" value="OK" name="show_message_ok" onclick="myrefresh()"/>  
+      </th>   
+    </tr>
+   </thead>
+   <!-- Testsuite detail --> 
+   {% for ts in testsuites %}
+      {% for ts_summary in ts %}
+        {% ifequal forloop.counter 1 %}
+        <thead><tr valign="middle">
+        	<th>
+        	<img src="/media/img/admin/icon-no.gif" width="10" height="10" class="collapse"
+        	onclick="collapse(this);" title="collapse">
+        	<img src="/media/img/admin/icon_addlink.gif" width="10" height="10" class="expand"
+        	onclick="expand(this);" style="display: None;" title="expand">
+        	</th>
+            <th><input type="checkbox" title="{{batch.id}}" id="sid_{{ts_summary.suite_no}}" value="{{ts_summary.suitename}}" onclick="Dajaxice.rat.RuckusAutoTest.update_ts(callback_upadte_ts, {'bid':this.title, 'sid':this.value, 'chk':this.checked});"/><a name="go_to{{ts_summary.suitename}}" id="go_to{{ts_summary.suitename}}" > </a></th>         
+            <th><input type="button" title="{{batch.id}}" id="tsid_{{ts_summary.suite_no}}" value="clear" name="{{ts_summary.suitename}}" onclick="Dajaxice.rat.RuckusAutoTest.update_ts_debug(callback_upadte_ts_debug, {'bid':this.title, 'sid':this.name, 'chk':0});"/></th>                              
+            <th height="36px">{{ts_summary.suite_no}}</th>
+            <th colspan="3" style="padding:4px;color:blue;font-size:16px;font-weight:bold;">
+                {% if ts_summary.is_combo_test%}<sup><span style="color:orange;">[Combo Suite]</span></sup>{% endif %}
+                {{ts_summary.suitename}}
+                <span style="color:#7B68EE;font-size:9px;font-weight:normal;text-align:right">
+                    {{ts_summary.suite_time_used}}</span></th>
+        </tr></thead>
+      {% else %}
+          <tbody>
+          {% for tc in ts_summary %}
+            <tr class="{% cycle 'row1' 'row2' %}">
+            	<th>&nbsp;</th>
+            	{% ifequal tc.tc_run.skip_run 0 %}
+                <th><input type="checkbox" title="tcid<{{tc.tc_run.id}}>" value="{{tc.tc_run.id}}" id="tcid_{{tc.tc_run.id}}" onclick="Dajaxice.rat.RuckusAutoTest.update(callback_status, {'id':this.value, 'chk':this.checked});"/>
+                {% else %}
+                <th>                
+                <input type="checkbox" checked title="tcid<{{tc.tc_run.id}}>" value="{{tc.tc_run.id}}" id="tcid_{{tc.tc_run.id}}" onclick="Dajaxice.rat.RuckusAutoTest.update(callback_status, {'id':this.value, 'chk':this.checked});"/>
+                {% endifequal %}
+                {% ifequal tc.tc_run.halt_if '' %}
+                <th><input type="checkbox" title="debug_tcid<{{tc.tc_run.id}}>" value="{{tc.tc_run.id}}" id="debug_tcid_{{tc.tc_run.id}}" onclick="Dajaxice.rat.RuckusAutoTest.update_debug(callback_status, {'id':this.value, 'chk':this.checked});"/>
+                {% else %}
+                <th>                
+                <input type="checkbox" checked title="debug_tcid<{{tc.tc_run.id}}>" value="{{tc.tc_run.id}}" id="debug_tcid_{{tc.tc_run.id}}" onclick="Dajaxice.rat.RuckusAutoTest.update_debug(callback_status, {'id':this.value, 'chk':this.checked});"/>
+                {% endifequal %} 
+              <th>{{tc.suite_no}}.{{forloop.counter}}</th>
+              <script type="text/javascript">
+              var obj=document.getElementById('select_show_message');
+              var index=obj.selectedIndex;
+              var num_to_show = obj.options[index].value;
+              var messages_to_show =sort_message("{{tc.tc_run.message}}",num_to_show,"{{tc.tc_run.result_type}}");
+              var result_to_show =result_view("{{tc.tc_run.result}}",num_to_show,"{{tc.tc_run.result_type}}");
+              </script> 
+              <td width="50%"><a href="../RuckusAutoTest/testrun/{{tc.tc_run.id}}/">{{tc.tc_run.common_name}}</a></td>
+              {% ifequal tc.tc_run.result "PASS" %}
+                  <td style="color:green;font-weight:bold;"><script>document.write(result_to_show);</script></td>
+              {% endifequal %}          
+              {% ifequal tc.tc_run.result "FAIL" %}
+                  <td style="color:red;font-weight:bold;"><script>document.write(result_to_show);</script>
+                  <script>
+                  //By chentao 2013-11, add an anchor to the failed testcase.
+                  fail_tc_num = fail_tc_num + 1;
+                  document.write("<a id="+fail_tc_num+"> </a>");                  
+                  </script>
+                  </td>
+              {% endifequal %}          
+              {% ifequal tc.tc_run.result "ERROR" %}
+                  <td style="color:magenta;font-weight:bold;"><script>document.write(result_to_show);</script>
+                  <script>
+                  //By chentao 2013-11, add an anchor to the failed testcase.
+                  fail_tc_num = fail_tc_num + 1;
+                  document.write("<a id="+fail_tc_num+"> </a>");                  
+                  </script>
+                  </td>
+              {% endifequal %}                    
+              {% ifequal tc.tc_run.result "NOTRUN" %}
+                  <td style="color:purple;font-weight:bold;"><script>document.write(result_to_show);</script></td>
+              {% endifequal %}                    
+              {% ifequal tc.tc_run.result "N/A" %}
+                  <td style="color:grey;font-weight:bold;"><script>document.write(result_to_show);</script></td>
+              {% endifequal %}                                  
+              {% ifequal tc.tc_run.result "" %}
+                  <td style="color:black;font-weight:bold;"><script>document.write(result_to_show);</script></td>
+              {% endifequal %}
+                                               
+              <td><script>document.write(messages_to_show);</script></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+       {% endifequal %}
+    <!-- end Testsuite detail -->
+   {% endfor %}
+  {% endfor %}
+  </table>
+  <div>
+  <span id="show">
+  </span>
+  </div> 
+  <p class="paginator">&nbsp;</p>
+  </div>    
+  <br>
+  <br>
+{% endifequal %}
+  {%comment%}Legend Section{%endcomment%}
+  <div class="module" id="changelist" style="width:50%;">
+  <table cellspacing="0">	
+  <tbody>
+    <tr class="row1">
+      <th>Error</th>
+      <td>Testbed enviroment cause script can not run as design</td>
+    </tr>
+    <tr class="row2">
+      <th>N/A</th>
+      <td>Some test cases in the test suites are not applicate on the current build</td>
+    </tr>
+    <tr class="row1">
+      <th>Not Run</th>
+      <td>Test cases are in the batch are waiting for running</td>
+    </tr>    
+  </tbody>
+  </table>
+  <p class="paginator">&nbsp;</p>
+  </div>  
+</div>
+{% endblock %}

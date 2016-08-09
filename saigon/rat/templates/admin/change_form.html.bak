@@ -1,0 +1,241 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_modify adminmedia %}
+{% load dajaxice_templatetags %}
+{{ media }}
+{% block extrastyle %}{{ block.super }}
+{% dajaxice_js_import %}
+<script type="text/javascript" src="../../../jsi18n/"></script>
+{% ifequal opts.object_name.lower "testrunmap" %}
+<script type="text/javascript" charset="utf-8">
+	$=function(id){return document.getElementById(id);}
+	setv = function(v){$('error').innerHTML = "<h1>" + v + "</h1>";}
+	/*set mapping value from selectbox as arg:v.*/
+	function set_selected_value(v){
+		t_list = $('id_plantestcase');
+		for(var i=t_list.length-1;i>=0;i--){
+			if(t_list.options[i].value==v){
+				t_list.options[i].selected=true;
+				break;
+			}
+		}
+	}
+	function search_plan_test(name, isMatchCase){
+		$('filter_testcase').innerHTML = '';
+		var opts = $('id_plan_testcase').children;
+		for(var i=0; i<opts.length && name; i++){
+			var ss = opts[i].innerHTML;
+			var tt = name;
+			if(!isMatchCase){
+				ss = ss.toLowerCase();
+				tt = tt.toLowerCase();
+			}
+			if(ss.indexOf(tt) >= 0){
+				opt = document.createElement("option");
+				opt.value=opts[i].value;
+				opt.innerHTML=opts[i].innerHTML;
+				$('filter_testcase').appendChild(opt);
+			}
+		}
+	}
+	/*get zd managment vlan tag*/
+	function get_zd_mgmt(){	    
+		if($('zd_mgmt_301').checked){return 'ZD301';}
+		if($('zd_mgmt_328').checked){return "ZD328";}
+		if($('zd_mgmt_none').checked){return "none";}
+		if($('zd_mgmt_other').checked){return "ZD" + $('zd_mgmt_v').value;}
+		return "none";
+	}
+	/*get ap management vlan tag*/
+	function get_ap_mgmt(){	    
+		if($('ap_mgmt_302').checked){return "AP302";}
+		if($('ap_mgmt_none').checked){return "none";}
+		if($('ap_mgmt_other').checked){return "AP"+$('ap_mgmt_v').value;}
+		return "none";
+	}
+	/*query zd and ap management vlan from db*/
+	function callback_mgmt_setting(data){
+		if(data!=Dajaxice.EXCEPTION){
+		    if(data.zd_mgmt=="328"){
+				$('zd_mgmt_328').checked=true;
+				$('zd_mgmt_v').value="";
+			}else if(data.zd_mgmt=="301"){
+				$('zd_mgmt_301').checked=true;
+				$('zd_mgmt_v').value="";
+			}else if(data.zd_mgmt=="none"){
+				$('zd_mgmt_none').checked=true;
+				$('zd_mgmt_v').value="";
+			}else{
+				$('zd_mgmt_other').checked=true
+				$('zd_mgmt_v').value=data.zd_mgmt;
+			}
+			
+			if(data.ap_mgmt=="302"){
+				$('ap_mgmt_302').checked=true;
+				$('ap_mgmt_v').value="";
+			}else if(data.ap_mgmt=="none"){
+				$('ap_mgmt_none').checked=true;
+				$('ap_mgmt_v').value="";
+			}else{
+				$('ap_mgmt_other').checked=true;
+				$('ap_mgmt_v').value=data.ap_mgmt;
+			}
+		}
+		else{
+			setv('Fetch data error!');
+		}
+	}
+	/*query mapping test cases by name*/
+	function callback_filter_map_test_case(data){
+		$('filter_testcase').innerHTML = '';
+		if(data!=Dajaxice.EXCEPTION && data.map_list){
+			var ml = data.map_list;
+			var len = ml.length;
+			$('result_total').innerHTML = len;
+			for(var i=0;i<len;i++){
+			    var opt = document.createElement("option");
+				opt.value=ml[i].id;
+				var ext_id = "[External_ID:"+ml[i].xid + "] ";
+				var suite_p = ml[i].suite_path + "  ";
+				var name_t = ml[i].name;
+				opt.innerHTML = ext_id + suite_p + name_t;
+				$('filter_testcase').appendChild(opt);
+			}
+		}
+		else{
+			setv('Fetch data error');
+		}
+	}
+	
+</script>
+{% endifequal %}
+<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />{% endblock %}
+
+{% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
+
+{% block bodyclass %}{{ opts.app_label }}-{{ opts.object_name.lower }} change-form{% endblock %}
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
+     {% if has_change_permission %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo;
+     {% if add %}{% trans "Add" %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endif %}{% endblock %}
+
+{% block content %}<div id="content-main">
+{% block object-tools %}
+
+{% if change %}{% if not is_popup %}
+  <ul class="object-tools"><li><a href="history/" class="historylink">{% trans "History" %}</a></li>
+  {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
+  </ul>
+{% endif %}{% endif %}
+{% endblock %}
+<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% block form_top %}{% endblock %}
+<div>
+{% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
+{% if save_on_top %}{% submit_row %}{% endif %}
+{% if errors %}
+    <p class="errornote">
+    {% blocktrans count errors|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </p>
+    <ul class="errorlist">{% for error in adminform.form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+{% endif %}
+
+{% for fieldset in adminform %}
+  {% include "admin/includes/fieldset.html" %}
+{% endfor %}
+
+{% block after_field_sets %}{% endblock %}
+
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% include inline_admin_formset.opts.template %}
+{% endfor %}
+
+{% block after_related_objects %}{% endblock %}
+<!--
+{% ifequal opts.object_name.lower "plantestcase" %}
+	<input type="button" id="search" name="search" value="search"/>
+{% endifequal %}
+-->
+{% submit_row %}
+
+{% if adminform and add %}
+   <script type="text/javascript">document.getElementById("{{ adminform.first_field.auto_id }}").focus();</script>
+{% endif %}
+
+{# JavaScript for prepopulated fields #}
+{% prepopulated_fields_js %}
+
+</div>
+</form>
+</div>
+<!--Which is used for handling search plan test case when test run can't match -->
+{% ifequal opts.object_name.lower "testrunmap" %}
+	<div id="searchpanel" class="module filtered"><!-- DIV needed for valid HTML -->
+		<legend><h1>Plan Test Case Searcher</h1></legend>
+		<hr>
+		<div>
+			<label for="searchbar"><img src="/media/img/admin/icon_searchbox.png" alt="Search"></label>
+			<label>Search Content</label>
+			&nbsp;&nbsp;&nbsp;
+			<label for="searchbar"><img src="/media/img/admin/icon_changelink.gif" alt="Search"></label>
+			<input type="checkbox" name="load_mgmt" id="load_mgmt" onchange="Dajaxice.rat.Testlink.load_mgmt_setting(callback_mgmt_setting, {'tr_id':$('id_testrun').value, 'chk':this.checked});" onclick="this.blur();"/>
+			<label>load management VLAN setting from testbed.</label>
+		</div>
+		<hr>
+		<hr>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="zd_mgmt" id="zd_mgmt_none"/>
+			<label>None</label>
+			<label>ZD management VLAN</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="zd_mgmt" id="zd_mgmt_328"/>
+			<label>328</label>
+			<label>ZD management VLAN</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="zd_mgmt" id="zd_mgmt_301"/>
+			<label>301</label>
+			<label>ZD management VLAN</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="zd_mgmt" id="zd_mgmt_other"/>
+			<label>Other</label>
+			<input type="textbox", name="zd_mgmt_v" id="zd_mgmt_v"/>
+		</div>
+		<hr>
+		<div>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="ap_mgmt" id="ap_mgmt_none"/>
+			<label>None</label>
+			<label>AP management VLAN</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="ap_mgmt" id="ap_mgmt_302"/>
+			<label>302</label>
+			<label>AP management VLAN</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="ap_mgmt" id="ap_mgmt_other"/>
+			<label>Other</label>
+			<input type="textbox", name="ap_mgmt_v" id="ap_mgmt_v"/>
+		</div>
+		<hr>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="checkbox" name="lower_chk" id="lower_chk"/>
+			<label>Match case:</label>
+			<input type="text" size="57" name="q" value="" id="searchbar" onkeypress="if(event.charCode==13 || event.which==13){$('searchbtn').click();};">
+			<input type="submit" value="Search" id="searchbtn" onclick="Dajaxice.rat.Testlink.filter_tl_rat_test_run(callback_filter_map_test_case,{'name':$('searchbar').value, 'match_case':$('lower_chk').checked, 'zd_mgmt':get_zd_mgmt(), 'ap_mgmt':get_ap_mgmt()});">
+		</div>
+		<hr>
+		<div>
+			<label for="searchbar"><img src="/media/img/admin/icon_success.gif" alt="Search"></label>
+			<label>Search Result:</label><span id="result_total"></span>
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;
+			<select name='filter_testcase' id='filter_testcase' onchange="set_selected_value(this.value);">
+				<option value>-----------------------------------------------------------------------------</option>
+			</select>
+		</div>
+	</div>
+	<div name="error" id="error"></div>
+{% endifequal %}
+{% endblock %}

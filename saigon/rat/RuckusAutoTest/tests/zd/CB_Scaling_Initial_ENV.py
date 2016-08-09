@@ -1,0 +1,38 @@
+# Copyright (C) 2008 Ruckus Wireless, Inc. All rights reserved.
+"""
+Description: This script is support to remove all WLANs and WLAN Groups
+Author: Chris Wang
+Email: cwang@ruckuswireless.com
+"""
+import logging
+
+from RuckusAutoTest.models import Test
+from RuckusAutoTest.components import Helpers as lib
+
+class CB_Scaling_Initial_ENV(Test):
+
+    def config(self, conf):
+        self._cfgInitTestParams(conf)
+
+    def test(self):
+        try:
+            self._cfgRemoveZDWlanGroupsAndWlan()
+        except Exception, ex:
+            self.errmsg = ex.message
+        if self.errmsg: return ("FAIL", self.errmsg)
+        msg = 'Remove Configuration on ZD Successfully'
+        return self.returnResult("PASS", msg)
+
+    def cleanup(self):
+        pass
+
+    def _cfgInitTestParams(self, conf):
+        self.errmsg = ''
+        self.zd = self.testbed.components['ZoneDirector']
+
+    def _cfgRemoveZDWlanGroupsAndWlan(self):
+        logging.info("Remove all Wlan Groups on the Zone Director.")
+        lib.zd.wgs.remove_wlan_groups(self.zd, self.testbed.get_aps_sym_dict_as_mac_addr_list())
+        logging.info("Remove all WLAN on the Zone Director.")
+        lib.zd.wlan.delete_all_wlans(self.zd)        
+

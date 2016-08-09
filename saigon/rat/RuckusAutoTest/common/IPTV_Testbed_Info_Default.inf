@@ -1,0 +1,47 @@
+[TESTBED_INFO]
+# information use for creating new testbed in  RAT framework
+name        = IPTV
+location    = IPTV QA Lab - Sunnyvale
+owner       = spham@ruckuswireless.com
+
+[COMMON]
+# Common information of AP, Remote Stations, Adapter
+win_sta_list 	    = ['10.100.0.180']
+linux_sta_list      = ['10.100.0.144', '10.100.0.179', '10.100.1.185']
+sta_wifi_subnet     = {'network':'192.168.2.0', 'subnet_mask':'255.255.255.0'}
+sta_wireless_intf_info = {'network':'192.168.3.0', 'subnet_mask':'255.255.255.0'}
+sta_pppoe_subnet = {'network':'192.168.10.0', 'subnet_mask':'255.255.255.0'}
+ap_conf             = {'username': 'super','password':'sp-admin'}
+ftpserv = {'ip_addr':'192.168.50.1', 'username':'rat_user', 'password':'lab4man1', 'rootpath':'/home/ftp'}
+pwr_mgmt = {'dev':'COM1', 'baudrate':'9600'}
+
+[AP_CONFIG]
+# Detail configuration for AP.
+# NOTICE: provide username/password if it is different with default value in COMMON section
+AP_Telsur = {'ip_addr':'192.168.50.191'}
+AP_Belgacom = {'ip_addr':'192.168.50.192'}
+AP_TeliaSonera = {'ip_addr':'192.168.50.193', 'username':'teliasuper', 'password':'b1mc54'}
+AP_Singtel = {'ip_addr':'192.168.50.194', 'username':'super', 'password':'H3ll0t3ch'}
+AP_Swisscom = {'ip_addr':'192.168.50.195'}
+AP_PCCW_4bss = {'ip_addr':'192.168.50.198'}
+AP_Pioneer = {'ip_addr':'192.168.7.2'}
+
+#AP_08 = {'ipaddr':'192.168.50.198'}
+#AP_09 = {'ipaddr':'192.168.50.199'}
+#AP_10 = {'ipaddr':'192.168.50.183'}
+#AP_11 = {'ip_addr':'192.168.50.247', 'username':'super', 'password':'sp-admin', 'use_serial':True, 'dev':'COM3', 'baudrate':115200}
+AP_12 = {'ip_addr':'192.168.50.247', 'username':'super', 'password':'sp-admin', 'use_serial':True, 'dev':'COM3', 'baudrate':115200}
+[ADAPTER_CONFIG]
+# Detail configuration for Ruckus Adapter.
+# NOTICE: provide username/password if it is different with default value in COMMON section
+# Adapters connect to linux PC
+# VF7111
+AD_02 = {'ip_addr':'192.168.2.252'}
+# VF2111
+#AD_04 = {'ip_addr':'192.168.2.251'}
+
+# Adapters connect to windows PC
+# VF2111
+#AD_03 = {'ip_addr':'192.168.2.253'}
+# VF7111
+AD_01 = {'ip_addr':'192.168.2.254'}

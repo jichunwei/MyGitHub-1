@@ -1,0 +1,7 @@
+username=00:1F:41:24:6E:B0
+password=perfdata
+getLiveDataUrl=https://192.168.2.1/getLiveData
+httpsPort=443
+branchName=InternetGatewayDevice.DeviceInfo. \
+    InternetGatewayDevice.LANDevice.0.WLANConfiguration.0.X_001392_WLANStats.0. \
+    InternetGatewayDevice.LANDevice.0.WLANConfiguration.0.AssociatedDevice.0.X_001392_ClientStats.*.

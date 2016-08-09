@@ -1,0 +1,51 @@
+{% extends "admin/base_site.html" %}
+
+{% load adminmedia admin_list i18n %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% block coltype %}flex{% endblock %}
+{% block extrastyle %}
+	<style type="text/css">
+	td,th {
+	    border: 1px solid;	    
+	}		
+	</style>
+{% endblock %}
+{% block content %}
+<h1>Daily Report Usage</h1>
+<div id="content-main">  
+<div class="module" id="changelist">
+ <table cellspacing="0" id="viewer" style="border: 1px solid;">
+  <thead>
+    <tr>
+      <th>Testbed ID</th>
+      <th>Logical Testbeds</th>
+      {% for day in DAYS %}           
+      	<th>{{ day }}</th>
+      {% endfor %}            
+    </tr>
+  </thead>  
+<tbody>
+    {% for key, values in Daily_Usage.items %}
+    	{% for name, data in values.items %}	    
+		    <tr class="{% cycle 'row1' 'row2' %}">
+		    	{% ifequal forloop.counter 1 %}          
+		        	<th rowspan="{{ values|length}}">{{key}}</th>
+		        {% endifequal %}		        
+		        <th colspan="1">{{ name }}</th>			        
+		        {% for ver, status, ed in data %}
+		        	{% if ver %}		        				        	
+		        		<td colspan="1">{{ ver }}[{{ status }}]</td>
+		        	{% else %}
+		        		<td colspan="1"></td>
+		        	{% endif %}
+		        {% endfor %}
+		    </tr>
+	   {% endfor %}	
+ 	{% endfor %}
+ </tbody>  
+ </table> 
+ </div>
+</div>
+{% endblock %}

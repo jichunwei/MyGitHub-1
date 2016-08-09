@@ -1,0 +1,40 @@
+[TESTBED_INFO]
+# information use for creating new testbed in  RAT framework
+name        = ATT
+location    = S3
+owner       = tubn@s3solutions.com.vn
+
+[COMMON]
+# Common information of AP, Remote Stations, Adapter
+win_sta_list 	    = ['192.168.2.4']
+ap_conf             = {'username': 'super','password':'sp-admin'}
+
+[AP_CONFIG]
+# Detail configuration for AP.
+# NOTICE: provide username/password if it is different with default value in COMMON section
+#AP_01 = {'ipaddr':'192.168.50.191'}
+#AP_02 = {'ipaddr':'192.168.50.192'}
+#AP_03 = {'ipaddr':'192.168.50.193', 'username':'teliasuper', 'password':'b1mc54'}
+#AP_04 = {'ipaddr':'192.168.50.194',  'username':'super', 'password':'H3ll0t3ch'}
+#AP_05 = {'ipaddr':'192.168.50.195'}
+#AP_06 = {'ipaddr':'192.168.7.2'}
+#AP_07 = {'ipaddr':'192.168.50.179'}
+#AP_08 = {'ipaddr':'192.168.50.198'}
+#AP_09 = {'ipaddr':'192.168.50.199'}
+#AP_10 = {'ipaddr':'192.168.50.183'}
+AP_01 = {'ipaddr':'192.168.2.1'}
+
+[ADAPTER_CONFIG]
+# Detail configuration for Ruckus Adapter.
+# NOTICE: provide username/password if it is different with default value in COMMON section
+# Adapters connect to linux PC
+# VF7111
+AD_01 = {'ipaddr':'192.168.2.254'}
+#VF2111
+#AD_04 = {'ipaddr':'192.168.2.254'}
+
+# Adapters connect to windows PC
+# VF2111
+#AD_03 = {'ipaddr':'192.168.2.253'}
+# VF7111
+#AD_01 = {'ipaddr':'192.168.2.251'}

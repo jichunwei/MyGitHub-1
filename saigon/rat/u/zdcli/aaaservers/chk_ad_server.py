@@ -1,0 +1,55 @@
+'''
+Created on 2010-10-26
+@author: cwang@ruckuswireless.com
+
+tea.py chk_ad_server te_root=u.zdcli.aaaservers
+'''
+
+from RuckusAutoTest.components.lib.zdcli import aaa_servers as svr_lib
+from RuckusAutoTest.components import (
+    create_zd_cli_by_ip_addr,
+    clean_up_rat_env,  
+)
+
+default_cfg = dict(ip_addr = '192.168.0.2', username = 'admin', password = 'admin', shell_key = '!v54! LWRLz@tZAOFoz.gnqM9LZyflW@hR1DBB')
+
+def do_config(**kwargs):
+    args = dict(server_name = 'ACTIVE_DIRECTORY')
+    args.update(kwargs)
+    server_name = args['server_name']
+    zdcli = create_zd_cli_by_ip_addr(**default_cfg)
+    res_d = svr_lib.get_aaa_server_by_name(zdcli, server_name)
+    return (zdcli, res_d)
+
+def do_test(zdcli, res_d):
+    aaa = res_d['AAA']
+    id = aaa['ID']
+    svr_d = id.values()[0]
+    ad_server = {
+        'server_name': 'ACTIVE_DIRECTORY',
+        'server_addr': '192.168.0.250',
+        'server_port': '389',
+        'win_domain_name': 'rat.ruckuswireless.com',
+    }
+    r, c = svr_lib.verify_aaa_server_by_type(zdcli, ad_server, svr_d, svr_lib.AD)
+    if r:
+        return ("PASS", "")
+    else:
+        return ("FAIL", c)
+
+def do_clean_up():
+    clean_up_rat_env()
+
+def main(**kwargs):
+    
+    try:
+        zdcli, res_d = do_config(**kwargs)
+        res = do_test(zdcli, res_d)
+        return res
+    finally:
+        do_clean_up()
+
+
+if __name__ == '__main__':
+    kwargs = dict()
+    main(**kwargs)

@@ -1,0 +1,156 @@
+﻿<html>
+
+<!--文本域-->
+<body>
+
+<form>
+    名：
+    <input type="text" name="firstname">
+    <br/>
+    姓：
+    <input type="text" name="lastname">
+</form>
+
+</body>
+</html>
+
+
+<form>
+    用户：
+    <input type="text" name="user" value="Tan">
+    <br/>
+    密码：
+    <input type="password" name="password">
+</form>
+<p>
+    请注意，当你在密码域中键入字符时，浏览器使用项目符号来代替这些字符。
+</p>
+
+<h2> 单选按钮（radio buttons) </h2>
+<form>
+    <input type="radio" name="sex" value="male"/> Male
+    <br/>
+    <input type="radio" name="sex" value="female"/> Female
+</form>
+
+
+<h3>复选框（Checkboxes）</h3>
+<form>
+    <input type="checkbox" name="bike"/>
+    I have a bike
+    <br/>
+    <input type="checkbox" name="car"/>
+    I have a car
+    <br/>
+    <input type="checkbox" name="cat"/>
+    I have a cat
+
+</form>
+
+<h3>下拉列表</h3>
+<form>
+    <select name="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="fiat">Fiat</option>
+        <option value="audi">Audi</option>
+        <option value="audi">Audi</option>
+    </select>
+</form>
+
+<h3>默认选择某项</h3>
+<form>
+    <select name="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="fiat" selected="selected">Fiat</option>
+        <option value="audi">Audi</option>
+    </select>
+</form>
+
+
+<h3>文本域(Textarea)</h3>
+<h4>
+    This example cannot be edited
+    because our editor uses a textarea
+    for input,
+    and your browser does not allow
+    a textarea inside a textarea.
+</h4>
+<textarea rows=10" cols="50">
+The cat was playing in the garden.
+</textarea>
+
+<h3>创建按钮</h3>
+<form>
+    <input type="button" value="Hello world!">
+</form>
+
+
+<h3>如何在数据周围绘制一个带标题的框</h3>
+<form>
+    <fieldset>
+        <legend>健康信息</legend>
+        身高：<input type="text"/>
+        体重：<input type="text"/>
+    </fieldset>
+</form>
+
+<p>如果表单周围没有边框，说明您的浏览器太老了。</p>
+
+
+<h3>带有输入框和确认按钮的表单</h3>
+<form action="D:\myfirstasp_net.asp" method="get">
+    <p>First name: <input type="text" name="fname"/></p>
+    <p>Last name: <input type="text" name="lname"/></p>
+    <input type="submit" value="Submit"/>
+</form>
+
+<p>请单击确认按钮，输入会发送到服务器上名为 "form_action.asp" 的页面。</p>
+
+
+<h3>带有复选框和确认按钮的表单</h3>
+
+<form name="input" action="/html/html_form_action.asp" method="get">
+    I have a bike:
+    <input type="checkbox" name="vehicle" value="Bike" checked="checked"/>
+    <br/>
+    I have a car:
+    <input type="checkbox" name="vehicle" value="Car"/>
+    <br/>
+    I have an airplane:
+    <input type="checkbox" name="vehicle" value="Airplane"/>
+    <br/><br/>
+    <input type="submit" value="Submit"/>
+</form>
+
+<form name="input" action="/html/html_form_action.asp" method="get">
+    Male:
+    <input type="radio" name="Sex" value="Male" checked="checked">
+    <br/>
+    Female:
+    <input type="radio" name="Sex" value="Female">
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+
+<p>如果您点击 "Submit" 按钮，您将把输入传送到名为 html_form_action.asp 的新页面。</p>
+
+
+<form action="MAILTO:tan_tsx@sina.com" method="post" enctype="text/plain">
+
+    <h3>这个表单会把电子邮件发送到 W3School。</h3>
+    姓名：<br/>
+    <input type="text" name="name" value="yourname" size="20">
+    <br/>
+    电邮：<br/>
+    <input type="text" name="mail" value="yourmail" size="20">
+    <br/>
+    内容：<br/>
+    <input type="text" name="comment" value="yourcomment" size="40">
+    <br/><br/>
+    <input type="submit" value="发送">
+    <input type="reset" value="重置">
+
+</form>
+

@@ -1,0 +1,5 @@
+username=00:1F:41:24:6C:A0
+password=perfdata
+getLiveDataUrl=https://192.168.2.1/getData
+httpsPort=443
+branchName=InternetGatewayDevice.
