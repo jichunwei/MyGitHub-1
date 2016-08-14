@@ -51,9 +51,15 @@ var _ = Describe("Book", func() {
 				}()
 			})
 		})
+
+		Context("when calling Foo()", func() {
+			Context("when no ID is provided", func() {
+				Specify("an ErrNoID error is returned", func() {
+				})
+			})
+		})
 	})
 })
-
 
 func doSomething() bool {
 	fmt.Println("do something!")
