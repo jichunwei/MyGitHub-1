@@ -55,20 +55,17 @@ var _ = Describe("Book", func() {
 				close(done)
 			}()
 		})
+
+		It("xxxx", func() {
+			fmt.Println("直接声明后调用函数")
+			func(a string, b int, c int) (done bool) {
+				fmt.Println("a:", a)
+				fmt.Println("sum:", b + c)
+				return
+			}("直接调用", 1, 2)
+		})
 	})
 
-})
-
-var _ = Describe("Book", func() {
-	It("can be loaded from JSON", func() {
-		//book := Book.NewBookFromJSON()
-		book := BOOK.NewBookFromJSON()
-
-		fmt.Println("book:", book)
-		Expect(book.Title).To(Equal("mybook"))
-		Expect(book.Author).To(Equal("liming"))
-		Expect(book.Pages).To(Equal(100))
-	})
 })
 
 func doSomething() bool {
