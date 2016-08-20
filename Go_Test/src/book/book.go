@@ -1,5 +1,7 @@
 package book
 
+import "github.com/onsi/gomega"
+
 type Book struct {
 	Title  string
 	Author string
@@ -19,9 +21,7 @@ func (book Book)CategoryByLength() string {
 
 var BOOK = new(Book)
 
-func (book Book)NewBookFromJSON() Book {
-	book.Title = "mybook"
-	book.Author = "liming"
-	book.Pages = 100
-	return book
+func (book *Book)FromJson(json interface{}) interface{} {
+	return gomega.MatchJSON(json)
+
 }
